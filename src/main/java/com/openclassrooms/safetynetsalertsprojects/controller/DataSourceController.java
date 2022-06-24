@@ -6,6 +6,9 @@ import com.openclassrooms.safetynetsalertsprojects.model.DataSource;
 import com.openclassrooms.safetynetsalertsprojects.model.FireStations;
 import com.openclassrooms.safetynetsalertsprojects.model.MedicalRecords;
 import com.openclassrooms.safetynetsalertsprojects.model.Persons;
+import com.openclassrooms.safetynetsalertsprojects.service.FireStationsService;
+import com.openclassrooms.safetynetsalertsprojects.service.MedicalRecordsService;
+import com.openclassrooms.safetynetsalertsprojects.service.PersonsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,22 +22,25 @@ import java.util.List;
 public class DataSourceController {
 
     @Autowired
-    DataSource dataSource;
+    PersonsService personsService;
+    @Autowired
+    FireStationsService fireStationsService;
+    @Autowired
+    MedicalRecordsService medicalRecordsService;
 
     @GetMapping("/persons")
     public List<Persons> showPersonsList() {
-        return dataSource.getPersons();
-
+        return personsService.getPersonList();
     }
 
     @GetMapping("/medicalrecords")
     public List<MedicalRecords> showMedicalRecordList() {
-        return dataSource.getMedicalrecords();
+        return medicalRecordsService.getMedicalRecordsList();
     }
 
     @GetMapping("/firestations")
     public List<FireStations> showFireStationsList() {
-        return dataSource.getFirestations();
+        return fireStationsService.getFireStationsList();
     }
 
 
