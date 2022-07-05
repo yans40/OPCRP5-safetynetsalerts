@@ -11,6 +11,8 @@ import com.openclassrooms.safetynetsalertsprojects.service.MedicalRecordsService
 import com.openclassrooms.safetynetsalertsprojects.service.PersonsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.File;
@@ -22,29 +24,44 @@ import java.util.List;
 public class DataSourceController {
 
     @Autowired
-    PersonsService personsService;
+   private PersonsService personsService;
     @Autowired
-    FireStationsService fireStationsService;
+    private FireStationsService fireStationsService;
     @Autowired
-    MedicalRecordsService medicalRecordsService;
+    private MedicalRecordsService medicalRecordsService;
+//
+//    @GetMapping("/persons")
+//    public List<Persons> showPersonsList() {
+//
+//        return personsService.getPersonList();
+//    }
+//
+//    @GetMapping("/medicalrecords")
+//    public List<MedicalRecords> showMedicalRecordList() {
+//
+//        return medicalRecordsService.getMedicalRecordsList();
+//    }
+//
+//    @GetMapping("/firestations")
+//    public List<FireStations> showFireStationsList() {
+//
+//        return fireStationsService.getFireStationsList();
+//    }
 
-    @GetMapping("/persons")
-    public List<Persons> showPersonsList() {
-        return personsService.getPersonList();
-    }
-
-    @GetMapping("/medicalrecords")
-    public List<MedicalRecords> showMedicalRecordList() {
-        return medicalRecordsService.getMedicalRecordsList();
-    }
-
-    @GetMapping("/firestations")
-    public List<FireStations> showFireStationsList() {
-        return fireStationsService.getFireStationsList();
-    }
-
+//    @GetMapping("/stationNumber")
+//    public List<FireStations> getFireStationByIsStationNumber(@RequestParam String stationNumber) {
+//
+//
+//                     List<FireStations> fireStationsFindByStationNumberList= fireStationsService.getFirestationByStationNumber(stationNumber);
+//
+//
+//
+//    }
 
 }
+
+
+
 
 
 

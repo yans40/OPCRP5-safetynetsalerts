@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public class PersonsRepository {
     @Autowired
-    DataSource dataSource;
+    private DataSource dataSource;
 
     public List<Persons> findAll() {
         return dataSource.getPersons();

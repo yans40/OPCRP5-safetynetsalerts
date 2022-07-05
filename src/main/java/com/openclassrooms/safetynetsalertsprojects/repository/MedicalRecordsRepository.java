@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public class MedicalRecordsRepository {
     @Autowired
-    DataSource dataSource;
+    private DataSource dataSource;
 
     public List<MedicalRecords> findAll(){
 
