@@ -1,6 +1,7 @@
 package com.openclassrooms.safetynetsalertsprojects.model;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.openclassrooms.safetynetsalertsprojects.dto.PersonsDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +13,8 @@ import java.util.List;
 @Component
 public class DataSource {
     @Autowired
-    ObjectMapper mapper;
+   private ObjectMapper mapper;
+
     String JSONPATH ="src/main/resources/json/jsondata";
 
     private List<Persons> persons ;

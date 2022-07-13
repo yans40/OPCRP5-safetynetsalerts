@@ -5,6 +5,10 @@ import com.openclassrooms.safetynetsalertsprojects.model.MedicalRecords;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -16,4 +20,7 @@ public class MedicalRecordsRepository {
 
         return dataSource.getMedicalrecords();
     }
+
+
+
 }

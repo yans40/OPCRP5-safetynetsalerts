@@ -1,6 +1,6 @@
 package com.openclassrooms.safetynetsalertsprojects.controller;
 
-import com.openclassrooms.safetynetsalertsprojects.model.MedicalRecords;
+import com.openclassrooms.safetynetsalertsprojects.dto.MedicalRecordsDto;
 import com.openclassrooms.safetynetsalertsprojects.service.MedicalRecordsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,10 +16,16 @@ public class MedicalRecordsController {
 
 
     @GetMapping("/medicalrecords")
-    public List<MedicalRecords> showMedicalRecordList() {
+    public List<MedicalRecordsDto> showMedicalRecordList() {
 
         return medicalRecordsService.getMedicalRecordsList();
     }
 
+    @GetMapping("/birthdays")
+
+    public List<String> birthdaysList(){
+
+        return medicalRecordsService.birthdays();
+    }
 
 }
