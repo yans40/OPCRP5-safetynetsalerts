@@ -1,7 +1,6 @@
 package com.openclassrooms.safetynetsalertsprojects.model;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.openclassrooms.safetynetsalertsprojects.dto.PersonsDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

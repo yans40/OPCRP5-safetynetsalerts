@@ -1,6 +1,5 @@
 package com.openclassrooms.safetynetsalertsprojects.repository;
 
-import com.openclassrooms.safetynetsalertsprojects.dto.PersonsDto;
 import com.openclassrooms.safetynetsalertsprojects.model.DataSource;
 import com.openclassrooms.safetynetsalertsprojects.model.Persons;
 import org.springframework.beans.factory.annotation.Autowired;

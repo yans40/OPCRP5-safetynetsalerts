@@ -1,6 +1,7 @@
 package com.openclassrooms.safetynetsalertsprojects.service;
 
-import com.openclassrooms.safetynetsalertsprojects.dto.PersonsDto;
+import com.openclassrooms.safetynetsalertsprojects.dto.CommunityEmailByCityDto;
+import com.openclassrooms.safetynetsalertsprojects.dto.FirestationByStationNumberDto;
 import com.openclassrooms.safetynetsalertsprojects.model.Persons;
 import com.openclassrooms.safetynetsalertsprojects.repository.PersonsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,27 +16,30 @@ public class PersonsService {
     private PersonsRepository personsRepository;
 
 
-    public List<PersonsDto> getPersonList() {
+    public List<FirestationByStationNumberDto> getPersonList() {
 
         List<Persons> personsList = personsRepository.findAll();
-        List<PersonsDto> personsDtoArrayList = new ArrayList<>();
+        List<FirestationByStationNumberDto> firestationByStationNumberDtoArrayList = new ArrayList<>();
+
         for (Persons person : personsList) {
-            PersonsDto personsDto = new PersonsDto();
-            personsDto.setFirstName(person.getFirstName());
-            personsDto.setLastName(person.getLastName());
-            personsDto.setAddress(person.getAddress());
-            personsDto.setPhone(person.getPhone());
-            personsDtoArrayList.add(personsDto);
+
+            FirestationByStationNumberDto firestationByStationNumberDto = new FirestationByStationNumberDto();
+            firestationByStationNumberDto.setFirstName(person.getFirstName());
+            firestationByStationNumberDto.setLastName(person.getLastName());
+            firestationByStationNumberDto.setAddress(person.getAddress());
+            firestationByStationNumberDto.setPhone(person.getPhone());
+            firestationByStationNumberDtoArrayList.add(firestationByStationNumberDto);
+
         }
-        return personsDtoArrayList;
+        return firestationByStationNumberDtoArrayList;
     }
 
-    public List<PersonsDto> getPersonsByAddress(String address) {
+    public List<FirestationByStationNumberDto> getPersonsByAddress(String address) {
 
-        List<PersonsDto> persons = getPersonList();
-        List<PersonsDto> personsByAddressList = new ArrayList<>();
+        List<FirestationByStationNumberDto> persons = getPersonList();
+        List<FirestationByStationNumberDto> personsByAddressList = new ArrayList<>();
 
-        for (PersonsDto person : persons) {
+        for (FirestationByStationNumberDto person : persons) {
             if (person.getAddress().contentEquals(address)) {
 
                 personsByAddressList.add(person);
@@ -45,18 +49,18 @@ public class PersonsService {
     }
 
 
-    public List<Persons> sameFamilyList(String lastname, String Address) {
+    public List<CommunityEmailByCityDto> emailListByCity(String city) {
 
         List<Persons> personsList = personsRepository.findAll();
-        List<Persons> familyList = new ArrayList<>();
+        List<CommunityEmailByCityDto> communityEmailByCityDtoList = new ArrayList<>();
 
-        for (Persons person : personsList) {
-            if ((person.getLastName() + person.getAddress()).contentEquals(lastname + Address)) {
-
-                familyList.add(person);
+        for (Persons persons : personsList) {
+            if (persons.getCity().contentEquals(city)) {
+             CommunityEmailByCityDto   communityEmailByCityDto = new CommunityEmailByCityDto();
+               communityEmailByCityDto.setEmail(persons.getEmail());
+                communityEmailByCityDtoList.add(communityEmailByCityDto);
             }
         }
-        return familyList;
+        return communityEmailByCityDtoList;
     }
-
 }

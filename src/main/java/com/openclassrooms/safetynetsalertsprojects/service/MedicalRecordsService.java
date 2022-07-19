@@ -73,11 +73,7 @@ public class MedicalRecordsService {
         Calendar birthDate = Calendar.getInstance();
         birthDate.setTime(dateOfBirth);
 
-        int age = today.get(Calendar.YEAR) - birthDate.get(Calendar.YEAR);
-
-        return age;
-
-
+        return today.get(Calendar.YEAR) - birthDate.get(Calendar.YEAR);
     }
 
 

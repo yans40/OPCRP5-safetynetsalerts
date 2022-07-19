@@ -1,6 +1,6 @@
 package com.openclassrooms.safetynetsalertsprojects.controller;
 
-import com.openclassrooms.safetynetsalertsprojects.dto.PersonsDto;
+import com.openclassrooms.safetynetsalertsprojects.dto.FirestationByStationNumberDto;
 import com.openclassrooms.safetynetsalertsprojects.service.PersonsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -16,13 +16,13 @@ public class PersonsController {
     private PersonsService personsService;
 
     @GetMapping
-    public List<PersonsDto> showPersonsList() {
+    public List<FirestationByStationNumberDto> showPersonsList() {
 
         return personsService.getPersonList();
     }
 
     @GetMapping ("/address")
-    public List<PersonsDto> findPersonsByAddress(@RequestParam String address){
+    public List<FirestationByStationNumberDto> findPersonsByAddress(@RequestParam String address){
 
         return personsService.getPersonsByAddress(address);
 
