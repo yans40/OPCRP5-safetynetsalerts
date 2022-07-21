@@ -151,6 +151,43 @@ public class DataSourceController {
         return listFireByAddress;
     }
 
+    @GetMapping("/flood/stations")
+    public List<FloodByListOfStationDto> floodListByStation(String stations) throws ParseException {
+
+        List<FirestationsDto> firestationsDtoList= fireStationsService.getFirestationByStationNumber(stations);
+        List<MedicalRecordsDto> medicalRecordsDtoList= medicalRecordsService.getMedicalRecordsList();
+        List<FloodByListOfStationDto> floodByListOfStationDtoList = new ArrayList<>();
+
+        for(FirestationsDto firestationsDto:firestationsDtoList){
+            List<FirestationByStationNumberDto> firestation = personsService.getPersonsByAddress(firestationsDto.getAddress());
+            for(FirestationByStationNumberDto fs:firestation){
+
+                if (firestationsDto.getAddress().equals(fs.getAddress())){
+                    List<FirestationByStationNumberDto> listPersonByAddress = new ArrayList<>();
+                    listPersonByAddress.add(fs);
+                    for (FirestationByStationNumberDto person:listPersonByAddress){
+                        for(MedicalRecordsDto medicalRecordsDto:medicalRecordsDtoList){
+
+                            if(person.getLastName().equals(medicalRecordsDto.getLastName())){
+                                String dateNaissance = medicalRecordsDto.getBirthdate();
+                                Date persAge = medicalRecordsService.birthdayStringToDate(dateNaissance);
+                                int age = medicalRecordsService.ageCalculator(persAge);
+                                FloodByListOfStationDto floodByListOfStationDto= new FloodByListOfStationDto();
+                                floodByListOfStationDto.setLastName(medicalRecordsDto.getLastName());
+                                floodByListOfStationDto.setPhone(person.getPhone());
+                                floodByListOfStationDto.setAge(age);
+                                floodByListOfStationDto.setAllergies(medicalRecordsDto.getAllergies());
+                                floodByListOfStationDto.setMedications(medicalRecordsDto.getMedications());
+                                floodByListOfStationDtoList.add(floodByListOfStationDto);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+return floodByListOfStationDtoList;
+   }
+
     @GetMapping("/personInfo")
     public List<PersonInfoByNameDto> personsListByFirstNameandLastName(String firstName, String lastName) throws ParseException {
 

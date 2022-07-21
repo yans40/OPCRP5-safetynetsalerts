@@ -31,7 +31,7 @@ public class FireStationsService {
         return firestationsDtoList;
     }
 
-    public List<FirestationsDto> getFirestationByStationNumber(@RequestParam String station ) {
+    public List<FirestationsDto> getFirestationByStationNumber(String station) {
 
         List<FirestationsDto> fireStations = getFireStationsList();
         List<FirestationsDto> fireStationsFindByNumber = new ArrayList<>();
@@ -47,4 +47,6 @@ public class FireStationsService {
         }
         return fireStationsFindByNumber;
     }
+
+
 }
