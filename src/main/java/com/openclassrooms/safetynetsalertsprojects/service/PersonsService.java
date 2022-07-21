@@ -2,6 +2,8 @@ package com.openclassrooms.safetynetsalertsprojects.service;
 
 import com.openclassrooms.safetynetsalertsprojects.dto.CommunityEmailByCityDto;
 import com.openclassrooms.safetynetsalertsprojects.dto.FirestationByStationNumberDto;
+import com.openclassrooms.safetynetsalertsprojects.dto.PersonInfoByNameDto;
+import com.openclassrooms.safetynetsalertsprojects.dto.PhoneListDto;
 import com.openclassrooms.safetynetsalertsprojects.model.Persons;
 import com.openclassrooms.safetynetsalertsprojects.repository.PersonsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +50,38 @@ public class PersonsService {
         return personsByAddressList;
     }
 
+    public List<PersonInfoByNameDto> getPersonByName(String firstName, String lastName) {
+
+        List<Persons> personsList = personsRepository.findAll();
+        List<PersonInfoByNameDto> personInfoByNameDtoList = new ArrayList<>();
+
+        for (Persons persons : personsList) {
+            if (firstName.equals(persons.getFirstName()) && lastName.equals(persons.getLastName())) {
+                PersonInfoByNameDto personInfoByNameDto = new PersonInfoByNameDto();
+                personInfoByNameDto.setFirstName(persons.getFirstName());
+                personInfoByNameDto.setLastName(persons.getLastName());
+                personInfoByNameDto.setAddress(persons.getAddress());
+                personInfoByNameDto.setEmail(persons.getEmail());
+                personInfoByNameDtoList.add(personInfoByNameDto);
+            }
+        }
+        return personInfoByNameDtoList;
+    }
+
+
+    public List<PhoneListDto> getPhoneListByAddress(String address) {
+        List<FirestationByStationNumberDto> personsList = getPersonsByAddress(address);
+        List<PhoneListDto> phoneListDtoList = new ArrayList<>();
+        for (FirestationByStationNumberDto person : personsList) {
+            if (person.getAddress().equals(address)) {
+                PhoneListDto phoneListDto = new PhoneListDto();
+                phoneListDto.setPhone(person.getPhone());
+                phoneListDtoList.add(phoneListDto);
+            }
+        }
+        return phoneListDtoList;
+    }
+
 
     public List<CommunityEmailByCityDto> emailListByCity(String city) {
 
@@ -56,11 +90,13 @@ public class PersonsService {
 
         for (Persons persons : personsList) {
             if (persons.getCity().contentEquals(city)) {
-             CommunityEmailByCityDto   communityEmailByCityDto = new CommunityEmailByCityDto();
-               communityEmailByCityDto.setEmail(persons.getEmail());
+                CommunityEmailByCityDto communityEmailByCityDto = new CommunityEmailByCityDto();
+                communityEmailByCityDto.setEmail(persons.getEmail());
                 communityEmailByCityDtoList.add(communityEmailByCityDto);
             }
         }
         return communityEmailByCityDtoList;
     }
+
+
 }

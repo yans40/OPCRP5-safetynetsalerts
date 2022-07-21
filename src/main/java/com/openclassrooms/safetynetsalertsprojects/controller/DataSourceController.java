@@ -25,84 +25,165 @@ public class DataSourceController {
     private MedicalRecordsService medicalRecordsService;
 
     @GetMapping("/firestation")
-    List<FirestationByStationNumberDto> personInPotentialRisk(@RequestParam String station) {
+    public FirestationByStationNumberParentDto personInPotentialRisk(@RequestParam String station) throws ParseException {
 
         List<FirestationsDto> fireStationsByNumber = fireStationsService.getFirestationByStationNumber(station);
         List<FirestationByStationNumberDto> personList = personsService.getPersonList();
-        List<MedicalRecordsDto> medicalRecordsList = medicalRecordsService.getMedicalRecordsList();//TODO comment récupérer les infos date de naissance afin de calculer l'age
+        List<MedicalRecordsDto> medicalRecordsList = medicalRecordsService.getMedicalRecordsList();
         List<FirestationByStationNumberDto> alertPersonsList = new ArrayList<>();
+        int nbOfAdult = 0;
+        int nbOfChild = 0;
 
         for (FirestationsDto fireStation : fireStationsByNumber) {
             for (FirestationByStationNumberDto person : personList) {
-                if (fireStation.getAddress().contentEquals(person.getAddress())) {
+
+                if (fireStation.getAddress().equals(person.getAddress())) {
                     alertPersonsList.add(person);
+                    for (MedicalRecordsDto pers : medicalRecordsList) {
+                        if (pers.getLastName().equals(person.getLastName()) && pers.getFirstName().equals(person.getFirstName())) {
+                            Date persAge = medicalRecordsService.birthdayStringToDate(pers.getBirthdate());
+                            int agePers = medicalRecordsService.ageCalculator(persAge);
+
+                            if (agePers >= 18) {
+                                nbOfAdult++;
+                            } else {
+                                nbOfChild++;
+                            }
+                        }
+                    }
                 }
             }
         }
-        return alertPersonsList;
+        FirestationByStationNumberParentDto firestationByStationNumberParentDto = new FirestationByStationNumberParentDto();
+        firestationByStationNumberParentDto.setPersonsInfo(alertPersonsList);
+        firestationByStationNumberParentDto.setNbAdult(nbOfAdult);
+        firestationByStationNumberParentDto.setNbChild(nbOfChild);
+        return firestationByStationNumberParentDto;
     }
-
 
     @GetMapping("/childAlert")
-    public List<FirestationByStationNumberDto> alertChildList(@RequestParam String address) throws ParseException {
+    public ChildAlertListAndFamilyDto findChildAndFamily(@RequestParam String address) throws ParseException {
 
         List<FirestationByStationNumberDto> personsByAddressList = personsService.getPersonsByAddress(address);
-        List<MedicalRecordsDto> medicalRecordsList = medicalRecordsService.getMedicalRecordsList();
-        List<FirestationByStationNumberDto> childList = new ArrayList<>();
-        List<FirestationByStationNumberDto> childFamilyList = new ArrayList<>();
+        List<MedicalRecordsDto> medicalRecordsDtoList = medicalRecordsService.getMedicalRecordsList();
+        List<ChildAlertByAddressDto> listOfChildByAddress = new ArrayList<>();
+        List<ParentListByAdressDto> listOfParentByAddress = new ArrayList<>();
 
         for (FirestationByStationNumberDto person : personsByAddressList) {
-            for (MedicalRecordsDto medicalRecordsPersondto : medicalRecordsList) {
+            for (MedicalRecordsDto pers : medicalRecordsDtoList) {
 
-                if (person.getFirstName().contentEquals(medicalRecordsPersondto.getFirstName())) {
-                    String dateNaissance = medicalRecordsPersondto.getBirthdate();
+                if (person.getFirstName().equals(pers.getFirstName()) && person.getLastName().equals(pers.getLastName())) {
+                    String dateNaissance = pers.getBirthdate();
                     Date persAge = medicalRecordsService.birthdayStringToDate(dateNaissance);
                     int age = medicalRecordsService.ageCalculator(persAge);
-                    if (age < 18) childList.add(person);
+                    if (age <= 18) {
+                        ChildAlertByAddressDto childAlertByAddressDto = new ChildAlertByAddressDto();
+                        childAlertByAddressDto.setFirstName(pers.getFirstName());
+                        childAlertByAddressDto.setLastName(pers.getLastName());
+                        childAlertByAddressDto.setAge(age);
+                        listOfChildByAddress.add(childAlertByAddressDto);
+                    }
                 }
             }
         }
-        for (FirestationByStationNumberDto child : childList) {
-            String familyName = child.getLastName();
-            String familyAddress = child.getAddress();
-            for (FirestationByStationNumberDto persons : personsByAddressList)
-                if ((familyName + familyAddress).contentEquals(persons.getLastName() + persons.getAddress())) {
-                    childFamilyList.add(persons);
-                }
-        }
-        return childFamilyList;
-    }
+        for (ChildAlertByAddressDto child : listOfChildByAddress) {
+            for (FirestationByStationNumberDto person : personsByAddressList) {
 
+                if (child.getLastName().equals(person.getLastName()) && address.equals(person.getAddress())) {
+                    ParentListByAdressDto parentListByAdressDto = new ParentListByAdressDto();
+                    parentListByAdressDto.setFirstName(person.getFirstName());
+                    parentListByAdressDto.setLastName(person.getLastName());
+                    listOfParentByAddress.add(parentListByAdressDto);
+                }
+            }
+        }
+        ChildAlertListAndFamilyDto childAlertListAndFamilyDto = new ChildAlertListAndFamilyDto();
+        childAlertListAndFamilyDto.setChildAlertByAdressDtoList(listOfChildByAddress);
+        childAlertListAndFamilyDto.setParentListByAdressDtoList(listOfParentByAddress);
+        return childAlertListAndFamilyDto;
+    }
 
     @GetMapping("/phoneAlert")
-    public List<FirestationByStationNumberDto> phoneAlertListByStation(@RequestParam String station) {
+    public List<PhoneListDto> phoneAlertListByStation(@RequestParam String station) {
 
         List<FirestationsDto> fireStationsList = fireStationsService.getFirestationByStationNumber(station);
-        List<FirestationByStationNumberDto> phoneAlertList = new ArrayList<>();
+        List<FirestationByStationNumberDto> listOfPersons = personsService.getPersonList();
+        List<PhoneListDto> listOfPhoneDtos = new ArrayList<>();
 
-        for (FirestationsDto fireStations : fireStationsList) {
-            List<FirestationByStationNumberDto> personsList = personsService.getPersonsByAddress(fireStations.getAddress());
-            for (FirestationByStationNumberDto persons : personsList) {
-                if (fireStations.getAddress().contentEquals(persons.getAddress())) {
-                    phoneAlertList.add(persons);
+        for (FirestationsDto firestationsDto : fireStationsList) {
+            for (FirestationByStationNumberDto person : listOfPersons) {
+
+                if (firestationsDto.getAddress().equals(person.getAddress())) {
+                    PhoneListDto phoneListDto = new PhoneListDto();
+                    phoneListDto.setPhone(person.getPhone());
+                    listOfPhoneDtos.add(phoneListDto);
                 }
             }
         }
-        return phoneAlertList;
+        return listOfPhoneDtos;
     }
 
-    @GetMapping ("/personInfo")
-    public List<PersonInfoByNameDto> personsListByFirstNameandLastName(String FirstName, String LastName){
-      List<PersonInfoByNameDto> personInfoByNameDtoList = new ArrayList<>();//ne fait rien
+    @GetMapping("/fire")
+    public List<FireByAddressDto> fireByAddressList(String address) throws Exception {
 
-        return personInfoByNameDtoList;
+        List<FirestationByStationNumberDto> personsByAddressList = personsService.getPersonsByAddress(address);
+        List<MedicalRecordsDto> medicalRecordsDtoList = medicalRecordsService.getMedicalRecordsList();
+        List<FireByAddressDto> listFireByAddress = new ArrayList<>();
+
+        for (FirestationByStationNumberDto person : personsByAddressList) {
+            for (MedicalRecordsDto pers : medicalRecordsDtoList) {
+
+                if ((pers.getLastName().equals(person.getLastName()) && pers.getFirstName().equals(person.getFirstName()))) {
+                    String dateNaissance = pers.getBirthdate();
+                    Date persAge = medicalRecordsService.birthdayStringToDate(dateNaissance);
+                    int age = medicalRecordsService.ageCalculator(persAge);
+                    FireByAddressDto fireByAddressDto = new FireByAddressDto();
+                    fireByAddressDto.setFirstName(person.getFirstName());
+                    fireByAddressDto.setLastName(pers.getLastName());
+                    fireByAddressDto.setPhone(person.getPhone());
+                    fireByAddressDto.setMedications(pers.getMedications());
+                    fireByAddressDto.setAllergies(pers.getAllergies());
+                    fireByAddressDto.setAge(age);
+                    listFireByAddress.add(fireByAddressDto);
+                }
+            }
+        }
+        return listFireByAddress;
     }
 
+    @GetMapping("/personInfo")
+    public List<PersonInfoByNameDto> personsListByFirstNameandLastName(String firstName, String lastName) throws ParseException {
 
-    @GetMapping("community")
-    public List<CommunityEmailByCityDto> EmailByCity(@RequestParam String city){
+        List<PersonInfoByNameDto> personInfoByNameDtoList = personsService.getPersonByName(firstName, lastName);
+        List<MedicalRecordsDto> medicalRecordsDtoList = medicalRecordsService.getMedicalRecordsList();
+        List<PersonInfoByNameDto> listByNameDtoList = new ArrayList<>();
 
-       return personsService.emailListByCity(city);
+        for (PersonInfoByNameDto persons : personInfoByNameDtoList) {
+            for (MedicalRecordsDto pers : medicalRecordsDtoList) {
+
+                if (persons.getFirstName().equals(pers.getFirstName()) && persons.getLastName().equals(pers.getLastName())) {
+                    String dateNaissance = pers.getBirthdate();
+                    Date persAge = medicalRecordsService.birthdayStringToDate(dateNaissance);
+                    int age = medicalRecordsService.ageCalculator(persAge);
+                    PersonInfoByNameDto personInfoByNameDto = new PersonInfoByNameDto();
+                    personInfoByNameDto.setFirstName(pers.getFirstName());
+                    personInfoByNameDto.setLastName(pers.getLastName());
+                    personInfoByNameDto.setAddress(persons.getAddress());
+                    personInfoByNameDto.setAge(age);
+                    personInfoByNameDto.setEmail(persons.getEmail());
+                    personInfoByNameDto.setMedications(pers.getMedications());
+                    personInfoByNameDto.setAllergies(pers.getAllergies());
+                    listByNameDtoList.add(personInfoByNameDto);
+                }
+
+            }
+        }
+        return listByNameDtoList;
+    }
+
+    @GetMapping("/communityEmail")
+    public List<CommunityEmailByCityDto> EmailByCity(@RequestParam String city) {
+        return personsService.emailListByCity(city);
     }
 }
 

@@ -6,11 +6,8 @@ import com.openclassrooms.safetynetsalertsprojects.repository.MedicalRecordsRepo
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -31,6 +28,7 @@ public class MedicalRecordsService {
             medicalRecordsDto.setFirstName(medicalRecords.getFirstName());
             medicalRecordsDto.setLastName(medicalRecords.getLastName());
             medicalRecordsDto.setBirthdate(medicalRecords.getBirthdate());
+            medicalRecordsDto.setAllergies(medicalRecords.getAllergies());
             medicalRecordsDto.setMedications(medicalRecords.getMedications());
             medicalRecordsDtoList.add(medicalRecordsDto);
         }
@@ -38,41 +36,17 @@ public class MedicalRecordsService {
     }
 
 
-    public List<String> birthdays() {
-        List<String> birthdayString = new ArrayList<>();
-        List<MedicalRecords> personsList = medicalRecordsRepository.findAll();
-
-        for (MedicalRecords md : personsList) {
-            LocalDate dateOfBirth = LocalDate.parse(md.getBirthdate(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-
-            birthdayString.add(md.getBirthdate());
-        }
-
-        return birthdayString;
-    }
-
-
     public Date birthdayStringToDate(String birthday) throws ParseException {
-
-//        DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-//        Date dateOfBirth = formatter.parse(birthday);
-//        return dateOfBirth;
         Date date = new SimpleDateFormat("dd/MM/yyyy").parse(birthday);
-
         return date;
-
-
     }
-
 
     public int ageCalculator(Date dateOfBirth) {
 
         Calendar today = Calendar.getInstance();
         today.setTime(new Date());
-
         Calendar birthDate = Calendar.getInstance();
         birthDate.setTime(dateOfBirth);
-
         return today.get(Calendar.YEAR) - birthDate.get(Calendar.YEAR);
     }
 

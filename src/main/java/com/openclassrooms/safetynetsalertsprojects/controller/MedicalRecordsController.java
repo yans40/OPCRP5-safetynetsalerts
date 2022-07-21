@@ -21,11 +21,6 @@ public class MedicalRecordsController {
         return medicalRecordsService.getMedicalRecordsList();
     }
 
-    @GetMapping("/birthdays")
 
-    public List<String> birthdaysList(){
-
-        return medicalRecordsService.birthdays();
-    }
 
 }
