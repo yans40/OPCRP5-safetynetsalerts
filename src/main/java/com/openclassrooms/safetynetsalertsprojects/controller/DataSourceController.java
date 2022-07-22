@@ -152,27 +152,30 @@ public class DataSourceController {
     }
 
     @GetMapping("/flood/stations")
-    public List<FloodByListOfStationDto> floodListByStation(String stations) throws ParseException {
+    public List<FloodByListOfStationDto> floodListByStation(@RequestParam List<String> stations) throws ParseException {
 
-        List<FirestationsDto> firestationsDtoList= fireStationsService.getFirestationByStationNumber(stations);
-        List<MedicalRecordsDto> medicalRecordsDtoList= medicalRecordsService.getMedicalRecordsList();
         List<FloodByListOfStationDto> floodByListOfStationDtoList = new ArrayList<>();
 
-        for(FirestationsDto firestationsDto:firestationsDtoList){
-            List<FirestationByStationNumberDto> firestation = personsService.getPersonsByAddress(firestationsDto.getAddress());
-            for(FirestationByStationNumberDto fs:firestation){
+        for(String station:stations) {
+        List<FirestationsDto> firestationsDtoList = fireStationsService.getFirestationByStationNumber(station);
+        List<MedicalRecordsDto> medicalRecordsDtoList = medicalRecordsService.getMedicalRecordsList();
 
-                if (firestationsDto.getAddress().equals(fs.getAddress())){
+
+        for (FirestationsDto firestationsDto : firestationsDtoList) {
+            List<FirestationByStationNumberDto> firestation = personsService.getPersonsByAddress(firestationsDto.getAddress());
+            for (FirestationByStationNumberDto fs : firestation) {
+
+                if (firestationsDto.getAddress().equals(fs.getAddress())) {
                     List<FirestationByStationNumberDto> listPersonByAddress = new ArrayList<>();
                     listPersonByAddress.add(fs);
-                    for (FirestationByStationNumberDto person:listPersonByAddress){
-                        for(MedicalRecordsDto medicalRecordsDto:medicalRecordsDtoList){
+                    for (FirestationByStationNumberDto person : listPersonByAddress) {
+                        for (MedicalRecordsDto medicalRecordsDto : medicalRecordsDtoList) {
 
-                            if(person.getLastName().equals(medicalRecordsDto.getLastName())){
+                            if (person.getLastName().equals(medicalRecordsDto.getLastName()) && person.getFirstName().equals(medicalRecordsDto.getFirstName())) {
                                 String dateNaissance = medicalRecordsDto.getBirthdate();
                                 Date persAge = medicalRecordsService.birthdayStringToDate(dateNaissance);
                                 int age = medicalRecordsService.ageCalculator(persAge);
-                                FloodByListOfStationDto floodByListOfStationDto= new FloodByListOfStationDto();
+                                FloodByListOfStationDto floodByListOfStationDto = new FloodByListOfStationDto();
                                 floodByListOfStationDto.setLastName(medicalRecordsDto.getLastName());
                                 floodByListOfStationDto.setPhone(person.getPhone());
                                 floodByListOfStationDto.setAge(age);
@@ -185,8 +188,9 @@ public class DataSourceController {
                 }
             }
         }
-return floodByListOfStationDtoList;
-   }
+        }
+        return floodByListOfStationDtoList;
+    }
 
     @GetMapping("/personInfo")
     public List<PersonInfoByNameDto> personsListByFirstNameandLastName(String firstName, String lastName) throws ParseException {
