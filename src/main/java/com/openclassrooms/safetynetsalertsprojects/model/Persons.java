@@ -11,6 +11,16 @@ public class Persons {
     private String email;
     private String zip;
 
+    public Persons(String firstName, String lastName, String address, String city, String phone, String email, String zip) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.address = address;
+        this.city = city;
+        this.phone = phone;
+        this.email = email;
+        this.zip = zip;
+    }
+
     public String getFirstName() {
         return firstName;
     }

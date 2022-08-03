@@ -15,12 +15,10 @@ public class MedicalRecordsController {
     private MedicalRecordsService medicalRecordsService;
 
 
-    @GetMapping("/medicalrecords")
-    public List<MedicalRecordsDto> showMedicalRecordList() {
 
+    @GetMapping("/medicalrecords")
+    public List<MedicalRecordsDto> getAllMedicalRecords() {
         return medicalRecordsService.getMedicalRecordsList();
     }
-
-
 
 }

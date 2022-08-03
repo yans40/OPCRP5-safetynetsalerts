@@ -1,5 +1,7 @@
 package com.openclassrooms.safetynetsalertsprojects.service;
 
+import com.openclassrooms.safetynetsalertsprojects.dto.FireByAddressDto;
+import com.openclassrooms.safetynetsalertsprojects.dto.FirestationByStationNumberDto;
 import com.openclassrooms.safetynetsalertsprojects.dto.MedicalRecordsDto;
 import com.openclassrooms.safetynetsalertsprojects.model.MedicalRecords;
 import com.openclassrooms.safetynetsalertsprojects.repository.MedicalRecordsRepository;
@@ -17,6 +19,7 @@ import java.util.List;
 public class MedicalRecordsService {
     @Autowired
     private MedicalRecordsRepository medicalRecordsRepository;
+
 
     public List<MedicalRecordsDto> getMedicalRecordsList() {
 
@@ -41,7 +44,7 @@ public class MedicalRecordsService {
         return date;
     }
 
-    public int ageCalculator(Date dateOfBirth) {
+    public int ageGenerator(Date dateOfBirth) {
 
         Calendar today = Calendar.getInstance();
         today.setTime(new Date());
@@ -50,6 +53,11 @@ public class MedicalRecordsService {
         return today.get(Calendar.YEAR) - birthDate.get(Calendar.YEAR);
     }
 
-
+    public int ageCalculator(MedicalRecordsDto medicalRecordsDto) throws ParseException {
+        String dateNaissance = medicalRecordsDto.getBirthdate();
+        Date persAge = birthdayStringToDate(dateNaissance);
+        int age = ageGenerator(persAge);
+        return age;
+    }
 
 }

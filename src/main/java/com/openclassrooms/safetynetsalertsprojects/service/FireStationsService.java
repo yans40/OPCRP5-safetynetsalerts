@@ -1,5 +1,6 @@
 package com.openclassrooms.safetynetsalertsprojects.service;
 
+import ch.qos.logback.core.CoreConstants;
 import com.openclassrooms.safetynetsalertsprojects.dto.FirestationsDto;
 import com.openclassrooms.safetynetsalertsprojects.model.FireStations;
 import com.openclassrooms.safetynetsalertsprojects.repository.FireStationsRepository;
@@ -46,6 +47,7 @@ public class FireStationsService {
 
         }
         return fireStationsFindByNumber;
+
     }
 
 
