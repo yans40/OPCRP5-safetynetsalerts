@@ -1,5 +1,7 @@
 package com.openclassrooms.safetynetsalertsprojects.model;
 
+import org.springframework.stereotype.Component;
+
 
 public class Persons {
 

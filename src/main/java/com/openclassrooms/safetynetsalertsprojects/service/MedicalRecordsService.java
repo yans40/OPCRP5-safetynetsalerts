@@ -1,7 +1,5 @@
 package com.openclassrooms.safetynetsalertsprojects.service;
 
-import com.openclassrooms.safetynetsalertsprojects.dto.FireByAddressDto;
-import com.openclassrooms.safetynetsalertsprojects.dto.FirestationByStationNumberDto;
 import com.openclassrooms.safetynetsalertsprojects.dto.MedicalRecordsDto;
 import com.openclassrooms.safetynetsalertsprojects.model.MedicalRecords;
 import com.openclassrooms.safetynetsalertsprojects.repository.MedicalRecordsRepository;

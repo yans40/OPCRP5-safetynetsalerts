@@ -30,12 +30,13 @@ public class PersonsController {
         return personsService.getPersonList();
     }
 
-    @GetMapping ("/address")
-    public List<FirestationByStationNumberDto> findPersonsByAddress(@RequestParam String address){
+    @GetMapping("/address")
+    public List<FirestationByStationNumberDto> findPersonsByAddress(@RequestParam String address) {
 
         return personsService.getPersonsByAddress(address);
 
     }
+
     @GetMapping("/firestation")
     public FirestationByStationNumberParentDto personInPotentialRisk(@RequestParam String station) throws ParseException {
 
@@ -57,6 +58,7 @@ public class PersonsController {
         return personsService.getPhoneListDtos(fireStationsList, listOfPersons);
 
     }
+
     @GetMapping("/fire")
     public List<FireByAddressDto> fireByAddressList(String address) throws Exception {
 

@@ -48,7 +48,7 @@ public class MedicalRecordsRepositoryTest {
         List<MedicalRecords> laMedicalRecordsListe = medicalRecordsRepository.findAll();
 
         assertEquals(3, laMedicalRecordsListe.size());
-        assertEquals("Bernard", medicalRecords1.getFirstName());
+        assertEquals("Alain", medicalRecords1.getFirstName());
         verify(dataSource,times(1)).getMedicalrecords();
 
     }

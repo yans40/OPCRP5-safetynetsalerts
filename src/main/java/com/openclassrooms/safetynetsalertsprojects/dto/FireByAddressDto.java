@@ -6,9 +6,22 @@ public class FireByAddressDto {
     private String firstName;
     private String lastName;
     private String phone;
-    private Integer age;
+    private int age;
     private List<String> medications;
     private List<String> allergies;
+
+    public FireByAddressDto(String firstName, String lastName, String phone, Integer age, List<String> medications, List<String> allergies) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
+        this.age = age;
+        this.medications = medications;
+        this.allergies = allergies;
+    }
+
+    public FireByAddressDto() {
+
+    }
 
     public String getFirstName() {
         return firstName;
