@@ -8,6 +8,16 @@ public class FirestationByStationNumberParentDto {
     private int nbAdult;
     private int nbChild;
 
+    public FirestationByStationNumberParentDto(List<FirestationByStationNumberDto> personsInfo, int nbAdult, int nbChild) {
+        this.personsInfo = personsInfo;
+        this.nbAdult = nbAdult;
+        this.nbChild = nbChild;
+    }
+
+    public FirestationByStationNumberParentDto() {
+
+    }
+
     public List<FirestationByStationNumberDto> getPersonsInfo() {
         return personsInfo;
     }

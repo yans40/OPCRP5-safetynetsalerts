@@ -6,6 +6,15 @@ public class ChildAlertListAndFamilyDto {
     List<ChildAlertByAddressDto> childAlertByAdressDtoList;
     List<ParentListByAdressDto> parentListByAdressDtoList;
 
+    public ChildAlertListAndFamilyDto(List<ChildAlertByAddressDto> childAlertByAdressDtoList, List<ParentListByAdressDto> parentListByAdressDtoList) {
+        this.childAlertByAdressDtoList = childAlertByAdressDtoList;
+        this.parentListByAdressDtoList = parentListByAdressDtoList;
+    }
+
+    public ChildAlertListAndFamilyDto() {
+
+    }
+
     public List<ChildAlertByAddressDto> getChildAlertByAdressDtoList() {
         return childAlertByAdressDtoList;
     }

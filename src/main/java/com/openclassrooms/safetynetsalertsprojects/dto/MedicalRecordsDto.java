@@ -10,7 +10,19 @@ public class MedicalRecordsDto {
         private List<String> medications;
         private List<String> allergies;
 
-        public String getFirstName() {
+    public MedicalRecordsDto(String firstName, String lastName, String birthdate, List<String> medications, List<String> allergies) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.birthdate = birthdate;
+        this.medications = medications;
+        this.allergies = allergies;
+    }
+
+    public MedicalRecordsDto() {
+
+    }
+
+    public String getFirstName() {
             return firstName;
         }
 

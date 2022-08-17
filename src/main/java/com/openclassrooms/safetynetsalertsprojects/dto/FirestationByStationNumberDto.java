@@ -1,6 +1,8 @@
 package com.openclassrooms.safetynetsalertsprojects.dto;
 
 
+import java.util.List;
+
 public class FirestationByStationNumberDto {
 
     private String firstName;
@@ -17,6 +19,9 @@ public class FirestationByStationNumberDto {
 
     public FirestationByStationNumberDto() {
 
+    }
+
+    public FirestationByStationNumberDto(List<FirestationByStationNumberDto> mylistOfFirestationsBystationNumberDto, int nbAdult, int nbChild) {
     }
 
     public String getFirstName() {

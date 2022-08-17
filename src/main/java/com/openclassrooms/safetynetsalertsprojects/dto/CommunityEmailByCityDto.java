@@ -1,9 +1,11 @@
 package com.openclassrooms.safetynetsalertsprojects.dto;
 
-import com.openclassrooms.safetynetsalertsprojects.model.Persons;
-
 public class CommunityEmailByCityDto {
     private String email;
+
+    public CommunityEmailByCityDto(String email) {
+        this.email = email;
+    }
 
     public String getEmail() {
         return email;

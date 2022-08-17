@@ -95,7 +95,7 @@ public class PersonsService {
 
         for (Persons persons : personsList) {
             if (persons.getCity().contentEquals(city)) {
-                CommunityEmailByCityDto communityEmailByCityDto = new CommunityEmailByCityDto();
+                CommunityEmailByCityDto communityEmailByCityDto = new CommunityEmailByCityDto("luc@Test.com");
                 communityEmailByCityDto.setEmail(persons.getEmail());
                 communityEmailByCityDtoList.add(communityEmailByCityDto);
             }

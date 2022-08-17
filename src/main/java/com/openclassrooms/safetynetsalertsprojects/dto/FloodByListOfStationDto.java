@@ -9,6 +9,18 @@ public class FloodByListOfStationDto {
     private List<String> medications;
     private List<String> allergies;
 
+    public FloodByListOfStationDto(String lastName, String phone, Integer age, List<String> medications, List<String> allergies) {
+        this.lastName = lastName;
+        this.phone = phone;
+        this.age = age;
+        this.medications = medications;
+        this.allergies = allergies;
+    }
+
+    public FloodByListOfStationDto() {
+
+    }
+
     public String getLastName() {
         return lastName;
     }

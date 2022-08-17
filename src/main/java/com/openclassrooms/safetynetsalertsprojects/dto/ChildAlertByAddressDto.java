@@ -5,6 +5,16 @@ public class ChildAlertByAddressDto {
     private String lastName;
     private Integer age;
 
+    public ChildAlertByAddressDto(String firstName, String lastName, Integer age) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.age = age;
+    }
+
+    public ChildAlertByAddressDto() {
+
+    }
+
     public String getFirstName() {
         return firstName;
     }

@@ -66,7 +66,7 @@ public class PersonsController {
     }
 
     @GetMapping("/communityEmail")
-    public List<CommunityEmailByCityDto> EmailByCity(@RequestParam String city) {
+    public List<CommunityEmailByCityDto> emailByCity(@RequestParam String city) {
         return personsService.emailListByCity(city);
     }
 

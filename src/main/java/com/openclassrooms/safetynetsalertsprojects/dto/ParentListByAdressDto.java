@@ -5,6 +5,15 @@ public class ParentListByAdressDto {
     private String firstName;
     private String lastName;
 
+    public ParentListByAdressDto(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
+    public ParentListByAdressDto() {
+
+    }
+
     public String getFirstName() {
         return firstName;
     }
