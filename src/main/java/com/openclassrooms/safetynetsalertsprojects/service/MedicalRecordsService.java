@@ -18,6 +18,11 @@ public class MedicalRecordsService {
     @Autowired
     private MedicalRecordsRepository medicalRecordsRepository;
 
+    public void addNewMedicalRecord(MedicalRecordsDto medicalRecordsDto) {
+        MedicalRecords medicalRecords =new MedicalRecords(medicalRecordsDto.getFirstName(), medicalRecordsDto.getLastName(), medicalRecordsDto.getBirthdate(),medicalRecordsDto.getMedications(),medicalRecordsDto.getAllergies());
+        medicalRecordsRepository.save(medicalRecords);
+    }
+
 
     public List<MedicalRecordsDto> getMedicalRecordsList() {
 

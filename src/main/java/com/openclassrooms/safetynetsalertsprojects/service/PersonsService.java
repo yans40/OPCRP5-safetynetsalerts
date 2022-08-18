@@ -21,6 +21,10 @@ public class PersonsService {
     @Autowired
     MedicalRecordsService medicalRecordsService;
 
+    public void addNewPerson(PersonDto personDto) {
+        Persons persons = new Persons(personDto.getFirstName(), personDto.getLastName(), personDto.getAddress(), personDto.getCity(), personDto.getPhone(), personDto.getZip(), personDto.getEmail());
+        personsRepository.save(persons);
+    }
 
 
     public List<FirestationByStationNumberDto> getPersonList() {

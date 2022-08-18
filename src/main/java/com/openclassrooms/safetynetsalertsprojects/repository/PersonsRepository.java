@@ -17,4 +17,8 @@ public class PersonsRepository {
         return dataSource.getPersons();
     }
 
+    public void save(Persons persons) {
+     List<Persons> personsList = findAll();
+     personsList.add(persons);
+    }
 }

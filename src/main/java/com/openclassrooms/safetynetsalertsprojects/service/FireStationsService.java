@@ -49,4 +49,8 @@ public class FireStationsService {
     }
 
 
+    public void addNewFirestation(FirestationsDto firestationsDto) {
+        FireStations fireStations = new FireStations(firestationsDto.getAddress(),firestationsDto.getStation());
+        fireStationsRepository.save(fireStations);
+    }
 }

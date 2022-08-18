@@ -5,9 +5,7 @@ import com.openclassrooms.safetynetsalertsprojects.service.FireStationsService;
 import com.openclassrooms.safetynetsalertsprojects.service.MedicalRecordsService;
 import com.openclassrooms.safetynetsalertsprojects.service.PersonsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 import java.util.List;
@@ -81,5 +79,11 @@ public class PersonsController {
     public List<PersonInfoByNameDto> personsListByFirstNameAndLastName(String firstName, String lastName) throws ParseException {
 
         return personsService.getPersonInfoByNameDtos(firstName, lastName);
+    }
+
+
+    @PostMapping("/person")
+    public void addNewPerson(@RequestBody PersonDto personDto){
+        personsService.addNewPerson(personDto);
     }
 }

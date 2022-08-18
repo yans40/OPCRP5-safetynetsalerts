@@ -16,4 +16,9 @@ public class FireStationsRepository {
 
         return dataSource.getFirestations();
     }
+
+    public void save(FireStations fireStations) {
+        List<FireStations> fireStationsList=findAll();
+        fireStationsList.add(fireStations);
+    }
 }

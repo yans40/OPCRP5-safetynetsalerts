@@ -127,6 +127,7 @@ public class PersonsControllerTest {
                         .get("/phoneAlert?firestation=firestation_number"))
                 .andDo(print())
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$").isNotEmpty());
     }
 
@@ -198,7 +199,6 @@ public class PersonsControllerTest {
 
     @Test
     void shouldReturnEmailOfPersonsinCity() throws Exception {
-        String city = "Culver";
 
         List<CommunityEmailByCityDto> emailList = new ArrayList<>();
 
