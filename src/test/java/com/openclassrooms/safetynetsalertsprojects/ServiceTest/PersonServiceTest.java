@@ -1,8 +1,6 @@
 package com.openclassrooms.safetynetsalertsprojects.ServiceTest;
 
-import com.openclassrooms.safetynetsalertsprojects.dto.FirestationByStationNumberDto;
-import com.openclassrooms.safetynetsalertsprojects.dto.PersonInfoByNameDto;
-import com.openclassrooms.safetynetsalertsprojects.dto.PhoneListDto;
+import com.openclassrooms.safetynetsalertsprojects.dto.*;
 import com.openclassrooms.safetynetsalertsprojects.model.Persons;
 import com.openclassrooms.safetynetsalertsprojects.repository.PersonsRepository;
 import com.openclassrooms.safetynetsalertsprojects.service.PersonsService;
@@ -12,6 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,14 +70,14 @@ public class PersonServiceTest {
 
         assertEquals("Alain", personsByAddressList.get(0).getFirstName());
         assertEquals("0101010101", personsByAddressList.get(0).getPhone());
-        assertNotEquals("30 rue de spring",personsByAddressList.get(0).getAddress());
+        assertNotEquals("30 rue de spring", personsByAddressList.get(0).getAddress());
 
     }
 
 
     @Test
 
-    public void getPersonByNameTest(){
+    public void getPersonByNameTest() {
 
         List<Persons> mylistOfFirestationsBystationNumberDto = new ArrayList<>();
 
@@ -91,14 +90,14 @@ public class PersonServiceTest {
         mylistOfFirestationsBystationNumberDto.add(charlesH);
 
         when(personsRepository.findAll()).thenReturn(mylistOfFirestationsBystationNumberDto);
-        List<PersonInfoByNameDto> personInfoByNameDtoList = personsService.getPersonByName("Bernard","KARL");
+        List<PersonInfoByNameDto> personInfoByNameDtoList = personsService.getPersonByName("Bernard", "KARL");
 
-        assertEquals("50 rue de java",personInfoByNameDtoList.get(0).getAddress());
-        assertEquals(1,personInfoByNameDtoList.size());
+        assertEquals("50 rue de java", personInfoByNameDtoList.get(0).getAddress());
+        assertEquals(1, personInfoByNameDtoList.size());
     }
 
     @Test
-    public void getTelephoneListByAddressTest(){
+    public void getTelephoneListByAddressTest() {
         List<Persons> mylistOfFirestationsBystationNumberDto = new ArrayList<>();
 
         Persons alainB = new Persons("Alain", "BOUCHON", "01 rue du Mock", "Nanterre", "0101010101", "alainb@test.fr", "92000");
@@ -112,8 +111,45 @@ public class PersonServiceTest {
         when(personsRepository.findAll()).thenReturn(mylistOfFirestationsBystationNumberDto);
         List<PhoneListDto> phoneListDtos = personsService.getPhoneListByAddress("30 rue de Spring");
 
-        assertEquals(1,phoneListDtos.size());
-        assertEquals("0303030303",phoneListDtos.get(0).getPhone());
+        assertEquals(1, phoneListDtos.size());
+        assertEquals("0303030303", phoneListDtos.get(0).getPhone());
+
+
+    }
+
+    @Test
+    public void getPersonlistTest() {
+
+        List<FirestationByStationNumberDto> listToTest = personsService.getPersonList();
+
+        assertEquals(listToTest.size(), personsRepository.findAll().size());
+    }
+
+    @Test
+    public void emailListTest() {
+        List<Persons> mylistOfFirestationsBystationNumberDto = new ArrayList<>();
+
+
+        Persons alainB = new Persons("Alain", "BOUCHON", "01 rue du Mock", "Nanterre", "0101010101", "alainb@test.fr", "92000");
+        Persons bernardK = new Persons("Bernard", "KARL", "50 rue de java ", "Paris", "0202020202", "BernardK@test.fr", "75000");
+        Persons charlesH = new Persons("Charles", "HENRY", "30 rue de Spring", "Creteil", "0303030303", "springC@test.fr", "77000");
+
+        mylistOfFirestationsBystationNumberDto.add(alainB);
+        mylistOfFirestationsBystationNumberDto.add(bernardK);
+        mylistOfFirestationsBystationNumberDto.add(charlesH);
+
+
+        when(personsRepository.findAll()).thenReturn(mylistOfFirestationsBystationNumberDto);
+        List<CommunityEmailByCityDto> medicalRecordsDtoList = personsService.emailListByCity("Paris");
+
+        assertEquals(1, medicalRecordsDtoList.size());
+        verify(personsRepository, times(1)).findAll();
+    }
+
+    @Test
+    public void getFireByaddressListTest() throws ParseException {
+
+
 
 
     }

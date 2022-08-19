@@ -47,4 +47,30 @@ public class FireStationsServiceTest {
         verify(fireStationsRepository, times(1)).findAll();
 
     }
+
+
+    @Test
+    void getFirestationByStationNumber() {
+        List<FireStations> mylistOfFirestations = new ArrayList<>();
+
+        FireStations fireStations1 = new FireStations("50 rue de java ", "2");
+        FireStations fireStations2 = new FireStations("20 rue du lac", "1");
+
+        mylistOfFirestations.add(fireStations1);
+        mylistOfFirestations.add(fireStations2);
+
+
+        when(fireStationsRepository.findAll()).thenReturn(mylistOfFirestations);
+        List<FirestationsDto> listToTest = fireStationsService.getFirestationByStationNumber("2");
+
+        assertEquals(1, listToTest.size());
+        assertEquals(listToTest.get(0).getAddress(), "50 rue de java ");
+        verify(fireStationsRepository, times(1)).findAll();
+
+
+    }
+
+    @Test
+    void addNewFirestation() {
+    }
 }

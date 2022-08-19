@@ -23,6 +23,10 @@ public class Persons {
         this.zip = zip;
     }
 
+    public Persons() {
+
+    }
+
     public String getFirstName() {
         return firstName;
     }

@@ -77,6 +77,22 @@ public class PersonsService {
         return personInfoByNameDtoList;
     }
 
+    public PersonDto findPersonByFirstNameAndLastName(String firstName,String lastName){
+        List<Persons> personsList = personsRepository.findAll();
+        PersonDto personDto = new PersonDto();
+        for(Persons persons:personsList){
+            if (firstName.equals(persons.getFirstName())&& lastName.equals(persons.getLastName())){
+                personDto.setFirstName(persons.getFirstName());
+                personDto.setLastName(persons.getLastName());
+                personDto.setAddress(persons.getAddress());
+                personDto.setCity(persons.getCity());
+                personDto.setPhone(persons.getPhone());
+                personDto.setEmail(persons.getEmail());
+                personDto.setZip(persons.getZip());
+            }
+        }
+        return personDto;
+    }
 
     public List<PhoneListDto> getPhoneListByAddress(String address) {
         List<FirestationByStationNumberDto> personsList = getPersonsByAddress(address);
@@ -296,5 +312,21 @@ public class PersonsService {
         }
         return listByNameDtoList;
     }
+
+    public void updatePersonAddress(String lastName,String firstName,PersonDto personDto) throws ParseException {
+
+        PersonDto personDto1 = findPersonByFirstNameAndLastName(firstName,lastName);
+        if (personDto.getFirstName().equals(personDto1.getFirstName()) && personDto.getLastName().equals(personDto1.getLastName())) {
+            personDto1.setFirstName(personDto.getFirstName());
+            personDto1.setAddress(personDto.getAddress());
+            personDto1.setCity(personDto.getCity());
+            personDto1.setPhone(personDto.getPhone());
+            personDto1.setEmail(personDto.getEmail());
+            personDto1.setZip(personDto.getZip());
+        }
+        addNewPerson(personDto1);
+
+    }
+
 
 }

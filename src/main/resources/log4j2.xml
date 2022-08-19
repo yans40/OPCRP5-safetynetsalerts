@@ -6,17 +6,17 @@
     </Property>
 </Properties>
 <Appenders>
-    <Console name="ConsoleAppender" target="SYSTEM_OUT" follow="true">
+    <Console name="Console" target="SYSTEM_OUT" follow="true">
         <PatternLayout pattern="${LOG_PATTERN}"/>
     </Console>
 </Appenders>
 <Loggers>
-    <Logger name="com.openclassrooms.safetynetsalertsprojects" level="debug" additivity="false">
-        <AppenderRef ref="ConsoleAppender"/>
+    <Logger name="com.openclassrooms.safetynetsalertsprojects" level="info" additivity="false">
+        <AppenderRef ref="Console"/>
     </Logger>
 
     <Root level="info">
-        <AppenderRef ref="ConsoleAppender"/>
+        <AppenderRef ref="Console"/>
     </Root>
 </Loggers>
 </Configuration>
