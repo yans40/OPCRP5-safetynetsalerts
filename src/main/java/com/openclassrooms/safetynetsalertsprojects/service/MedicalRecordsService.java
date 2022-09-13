@@ -19,8 +19,45 @@ public class MedicalRecordsService {
     private MedicalRecordsRepository medicalRecordsRepository;
 
     public void addNewMedicalRecord(MedicalRecordsDto medicalRecordsDto) {
-        MedicalRecords medicalRecords =new MedicalRecords(medicalRecordsDto.getFirstName(), medicalRecordsDto.getLastName(), medicalRecordsDto.getBirthdate(),medicalRecordsDto.getMedications(),medicalRecordsDto.getAllergies());
+        MedicalRecords medicalRecords = dtoToMedicalRecords(medicalRecordsDto);
         medicalRecordsRepository.save(medicalRecords);
+    }
+
+    public void updateMedicalRecord(String firstName, String lastName, MedicalRecordsDto medicalRecordsDto) {
+        MedicalRecordsDto medicalRecordsDto1 = findMedicalRecordsByFirstNameAndLastName(firstName, lastName);
+        settingMedicalRecordsChanges(medicalRecordsDto1, medicalRecordsDto);
+        MedicalRecords medicalRecords = dtoToMedicalRecords(medicalRecordsDto1);
+        medicalRecordsRepository.save(medicalRecords);
+    }
+
+    public MedicalRecords dtoToMedicalRecords(MedicalRecordsDto medicalRecordsDto1) {
+        return new MedicalRecords(medicalRecordsDto1.getFirstName(), medicalRecordsDto1.getLastName(), medicalRecordsDto1.getBirthdate(), medicalRecordsDto1.getMedications(), medicalRecordsDto1.getAllergies());
+    }
+
+    private void settingMedicalRecordsChanges(MedicalRecordsDto md1, MedicalRecordsDto md2) {
+        md1.setFirstName(md2.getFirstName());
+        md1.setLastName(md2.getLastName());
+        md1.setBirthdate(md2.getBirthdate());
+        md1.setMedications(md2.getMedications());
+        md1.setAllergies(md2.getMedications());
+    }
+
+
+    public MedicalRecordsDto findMedicalRecordsByFirstNameAndLastName(String firstName, String lastName) {
+        List<MedicalRecords> medicalRecordsList = medicalRecordsRepository.findAll();
+        MedicalRecordsDto medicalRecordsDto = new MedicalRecordsDto();
+
+        for (MedicalRecords md : medicalRecordsList) {
+
+            if (md.getFirstName().equals(firstName) && md.getLastName().equals(lastName)) {
+                medicalRecordsDto.setFirstName(md.getFirstName());
+                medicalRecordsDto.setLastName(md.getLastName());
+                medicalRecordsDto.setBirthdate(md.getBirthdate());
+                medicalRecordsDto.setAllergies(md.getAllergies());
+                medicalRecordsDto.setMedications(md.getMedications());
+            }
+        }
+        return medicalRecordsDto;
     }
 
 
@@ -29,7 +66,7 @@ public class MedicalRecordsService {
         List<MedicalRecords> medicalRecordsList = medicalRecordsRepository.findAll();
         List<MedicalRecordsDto> medicalRecordsDtoList = new ArrayList<>();
 
-        for(MedicalRecords medicalRecords : medicalRecordsList){
+        for (MedicalRecords medicalRecords : medicalRecordsList) {
             MedicalRecordsDto medicalRecordsDto = new MedicalRecordsDto();
             medicalRecordsDto.setFirstName(medicalRecords.getFirstName());
             medicalRecordsDto.setLastName(medicalRecords.getLastName());

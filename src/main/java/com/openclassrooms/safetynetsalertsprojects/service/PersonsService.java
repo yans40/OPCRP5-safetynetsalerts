@@ -3,6 +3,8 @@ package com.openclassrooms.safetynetsalertsprojects.service;
 import com.openclassrooms.safetynetsalertsprojects.dto.*;
 import com.openclassrooms.safetynetsalertsprojects.model.Persons;
 import com.openclassrooms.safetynetsalertsprojects.repository.PersonsRepository;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,8 @@ import java.util.List;
 
 @Service
 public class PersonsService {
+
+    private static final Logger logger = LogManager.getLogger(PersonsService.class);
     @Autowired
     private PersonsRepository personsRepository;
     @Autowired
@@ -21,14 +25,63 @@ public class PersonsService {
     @Autowired
     MedicalRecordsService medicalRecordsService;
 
+
+
     public void addNewPerson(PersonDto personDto) {
-        Persons persons = new Persons(personDto.getFirstName(), personDto.getLastName(), personDto.getAddress(), personDto.getCity(), personDto.getPhone(), personDto.getZip(), personDto.getEmail());
+        logger.info("adding new person !");
+        Persons persons = dtoToPerson(personDto);
         personsRepository.save(persons);
     }
 
+    public Persons dtoToPerson(PersonDto personDto) {
+        logger.info("transforming dto to persons !");
+        return new Persons(personDto.getFirstName(), personDto.getLastName(), personDto.getAddress(), personDto.getCity(), personDto.getPhone(), personDto.getZip(), personDto.getEmail());
+    }
+
+
+
+    public void updatePerson(String firstName, String lastName, PersonDto personDto) {
+        logger.info("updating in progress ...!");
+        PersonDto personDto1 = findPersonByFirstNameAndLastName(firstName, lastName);
+        settingPersonDtoChanges(personDto1, personDto.getFirstName(), personDto.getLastName(), personDto.getAddress(), personDto.getCity(), personDto.getPhone(), personDto.getEmail(), personDto.getZip(), personDto);
+        Persons persons = dtoToPerson(personDto1);
+        int index = getIndexOfPersons(personDto1);
+        personsRepository.update(index, persons);
+    }
+
+    public void deletePerson(String firstName, String lastName) {
+        logger.info("deleting in progress ...!");
+        PersonDto personDto1= findPersonByFirstNameAndLastName(firstName, lastName);
+        int index = getIndexOfPersons(personDto1);
+        personsRepository.delete(index);
+    }
+    public int getIndexOfPersons(PersonDto personDto) {
+        logger.info("index catching!");
+        List<Persons> list = personsRepository.findAll();
+        int index = 0;
+        for (Persons pers : list) {
+            if (pers.getFirstName().equals(personDto.getFirstName()) && pers.getLastName().equals(personDto.getLastName())) {
+                logger.info("in the if !");
+                index = list.lastIndexOf(pers);
+            }
+        }
+        return index;
+
+    }
+
+    private void settingPersonDtoChanges(PersonDto personDto1, String firstName2, String lastName2, String address, String city, String phone, String email, String zip, PersonDto personDto) {
+        logger.info("setting changes !");
+        personDto1.setFirstName(firstName2);
+        personDto1.setLastName(lastName2);
+        personDto1.setAddress(address);
+        personDto1.setCity(city);
+        personDto1.setPhone(phone);
+        personDto1.setEmail(email);
+        personDto1.setZip(zip);
+    }
 
     public List<FirestationByStationNumberDto> getPersonList() {
-
+        logger.info("getPersonList!");
         List<Persons> personsList = personsRepository.findAll();
         List<FirestationByStationNumberDto> firestationByStationNumberDtoArrayList = new ArrayList<>();
 
@@ -77,22 +130,18 @@ public class PersonsService {
         return personInfoByNameDtoList;
     }
 
-    public PersonDto findPersonByFirstNameAndLastName(String firstName,String lastName){
+    public PersonDto findPersonByFirstNameAndLastName(String firstName, String lastName) {
+        logger.info("checking to find person with the same firstName and lastName ...!");
         List<Persons> personsList = personsRepository.findAll();
         PersonDto personDto = new PersonDto();
-        for(Persons persons:personsList){
-            if (firstName.equals(persons.getFirstName())&& lastName.equals(persons.getLastName())){
-                personDto.setFirstName(persons.getFirstName());
-                personDto.setLastName(persons.getLastName());
-                personDto.setAddress(persons.getAddress());
-                personDto.setCity(persons.getCity());
-                personDto.setPhone(persons.getPhone());
-                personDto.setEmail(persons.getEmail());
-                personDto.setZip(persons.getZip());
+        for (Persons persons : personsList) {
+            if (persons.getFirstName().equals(firstName) && persons.getLastName().equals(lastName) ) {
+                settingPersonDtoChanges(personDto, persons.getFirstName(), persons.getLastName(), persons.getAddress(), persons.getCity(), persons.getPhone(), persons.getEmail(), persons.getZip(), personDto);
             }
         }
         return personDto;
     }
+
 
     public List<PhoneListDto> getPhoneListByAddress(String address) {
         List<FirestationByStationNumberDto> personsList = getPersonsByAddress(address);
@@ -127,10 +176,9 @@ public class PersonsService {
 
         return getFirestationByStationNumberDto(station, fireStationsService, medicalRecordsService);
 
-
     }
 
-    public  FirestationByStationNumberParentDto getFirestationByStationNumberDto(String station, FireStationsService fireStationsService, MedicalRecordsService medicalRecordsService) throws ParseException {
+    public FirestationByStationNumberParentDto getFirestationByStationNumberDto(String station, FireStationsService fireStationsService, MedicalRecordsService medicalRecordsService) throws ParseException {
         List<FirestationsDto> fireStationsByNumber = fireStationsService.getFirestationByStationNumber(station);
         List<FirestationByStationNumberDto> personList = getPersonList();
         List<MedicalRecordsDto> medicalRecordsList = medicalRecordsService.getMedicalRecordsList();
@@ -165,7 +213,7 @@ public class PersonsService {
         return firestationByStationNumberParentDto;
     }
 
-    public  ChildAlertListAndFamilyDto getChildAlertListAndFamilyDto(String address, List<FirestationByStationNumberDto> personsByAddressList, MedicalRecordsService medicalRecordsService) throws ParseException {
+    public ChildAlertListAndFamilyDto getChildAlertListAndFamilyDto(String address, List<FirestationByStationNumberDto> personsByAddressList, MedicalRecordsService medicalRecordsService) throws ParseException {
         List<MedicalRecordsDto> medicalRecordsDtoList = medicalRecordsService.getMedicalRecordsList();
         List<ChildAlertByAddressDto> listOfChildByAddress = new ArrayList<>();
         List<ParentListByAdressDto> listOfParentByAddress = new ArrayList<>();
@@ -202,7 +250,7 @@ public class PersonsService {
         return childAlertListAndFamilyDto;
     }
 
-    public List<PhoneListDto> getPhoneNumberByFirestation(String firestation){
+    public List<PhoneListDto> getPhoneNumberByFirestation(String firestation) {
         List<FirestationsDto> fireStationsList = fireStationsService.getFirestationByStationNumber(firestation);
         List<FirestationByStationNumberDto> listOfPersons = getPersonList();
         return getPhoneListDtos(fireStationsList, listOfPersons);
@@ -255,7 +303,6 @@ public class PersonsService {
         for (String station : stations) {
             List<FirestationsDto> firestationsDtoList = fireStationsService.getFirestationByStationNumber(station);
             List<MedicalRecordsDto> medicalRecordsDtoList = medicalRecordsService.getMedicalRecordsList();
-
 
             for (FirestationsDto firestationsDto : firestationsDtoList) {
                 List<FirestationByStationNumberDto> firestation = getPersonsByAddress(firestationsDto.getAddress());
@@ -312,21 +359,4 @@ public class PersonsService {
         }
         return listByNameDtoList;
     }
-
-    public void updatePersonAddress(String lastName,String firstName,PersonDto personDto) throws ParseException {
-
-        PersonDto personDto1 = findPersonByFirstNameAndLastName(firstName,lastName);
-        if (personDto.getFirstName().equals(personDto1.getFirstName()) && personDto.getLastName().equals(personDto1.getLastName())) {
-            personDto1.setFirstName(personDto.getFirstName());
-            personDto1.setAddress(personDto.getAddress());
-            personDto1.setCity(personDto.getCity());
-            personDto1.setPhone(personDto.getPhone());
-            personDto1.setEmail(personDto.getEmail());
-            personDto1.setZip(personDto.getZip());
-        }
-        addNewPerson(personDto1);
-
-    }
-
-
 }

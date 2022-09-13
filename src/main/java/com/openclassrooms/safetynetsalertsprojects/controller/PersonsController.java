@@ -1,7 +1,6 @@
 package com.openclassrooms.safetynetsalertsprojects.controller;
 
 import com.openclassrooms.safetynetsalertsprojects.dto.*;
-import com.openclassrooms.safetynetsalertsprojects.model.Persons;
 import com.openclassrooms.safetynetsalertsprojects.service.FireStationsService;
 import com.openclassrooms.safetynetsalertsprojects.service.MedicalRecordsService;
 import com.openclassrooms.safetynetsalertsprojects.service.PersonsService;
@@ -16,7 +15,7 @@ import java.util.List;
 @RestController
 
 public class PersonsController {
-    private static final Logger logger = LogManager.getLogger("PersonsController");
+    private static final Logger logger = LogManager.getLogger(PersonsController.class);
     @Autowired
     private PersonsService personsService;
     @Autowired
@@ -91,15 +90,13 @@ public class PersonsController {
         personsService.addNewPerson(personDto);
     }
 
-    @PutMapping("/person/updateAddress")
-    public void updatePersonAddress(@RequestBody PersonDto personDto, @PathVariable String firstName, String lastName) throws ParseException {
-        personsService.updatePersonAddress(firstName, lastName, personDto);
+    @PutMapping("/persons/update/{firstName}&{lastName}")
+    public void updatePersonInfo(@RequestBody PersonDto personDto, @PathVariable String firstName, String lastName) throws ParseException {
+        personsService.updatePerson(firstName,lastName, personDto);
     }
 
-    @DeleteMapping("/person/delete")
-    public void deletePerson(@PathVariable String firstName) {
-
+   @DeleteMapping("/persons/delete/{firstName}&{lastName}")
+    public void deletePerson(@PathVariable String firstName,String lastName){
+     personsService.deletePerson(firstName,lastName);
     }
-
-
 }

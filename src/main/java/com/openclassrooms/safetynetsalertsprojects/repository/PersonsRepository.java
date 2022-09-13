@@ -2,14 +2,17 @@ package com.openclassrooms.safetynetsalertsprojects.repository;
 
 import com.openclassrooms.safetynetsalertsprojects.model.DataSource;
 import com.openclassrooms.safetynetsalertsprojects.model.Persons;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public class PersonsRepository {
+
+    private static final Logger logger = LogManager.getLogger(PersonsRepository.class);
     @Autowired
     private DataSource dataSource;
 
@@ -20,8 +23,22 @@ public class PersonsRepository {
 
 
     public void save(Persons persons) {
-     List<Persons> personsList = findAll();
-     personsList.add(persons);
+        logger.info("save ok !");
+        List<Persons> personsList = findAll();
+        personsList.add(persons);
     }
 
+    public void update(int index, Persons persons) {
+        logger.info("update ok !");
+        List<Persons> list = findAll();
+        list.set(index, persons);
+    }
+
+    public void delete(int index) {
+        logger.info("delete with index !");
+        List<Persons> list = findAll();
+        list.remove(index);
+        logger.info("delete successful!");
+
+    }
 }
