@@ -41,7 +41,7 @@ public class PersonsService {
     public void updatePerson(String firstName, String lastName, PersonDto personDto) {
         logger.info("updating in progress ...!");
         PersonDto personDto1 = findPersonByFirstNameAndLastName(firstName, lastName);
-        settingPersonDtoChanges(personDto1, personDto.getFirstName(), personDto.getLastName(), personDto.getAddress(), personDto.getCity(), personDto.getPhone(), personDto.getEmail(), personDto.getZip(), personDto);
+        settingPersonDtoChanges(personDto1, personDto.getFirstName(), personDto.getLastName(), personDto.getAddress(), personDto.getCity(), personDto.getPhone(), personDto.getEmail(), personDto.getZip());
         Persons persons = dtoToPerson(personDto1);
         int index = getIndexOfPersons(personDto1);
         personsRepository.update(index, persons);
@@ -69,7 +69,7 @@ public class PersonsService {
 
     }
 
-    private void settingPersonDtoChanges(PersonDto personDto1, String firstName2, String lastName2, String address, String city, String phone, String email, String zip, PersonDto personDto) {
+    private void settingPersonDtoChanges(PersonDto personDto1, String firstName2, String lastName2, String address, String city, String phone, String email, String zip) {
         logger.info("setting changes !");
         personDto1.setFirstName(firstName2);
         personDto1.setLastName(lastName2);
@@ -136,7 +136,7 @@ public class PersonsService {
         PersonDto personDto = new PersonDto();
         for (Persons persons : personsList) {
             if (persons.getFirstName().equals(firstName) && persons.getLastName().equals(lastName)) {
-                settingPersonDtoChanges(personDto, persons.getFirstName(), persons.getLastName(), persons.getAddress(), persons.getCity(), persons.getPhone(), persons.getEmail(), persons.getZip(), personDto);
+                settingPersonDtoChanges(personDto, persons.getFirstName(), persons.getLastName(), persons.getAddress(), persons.getCity(), persons.getPhone(), persons.getEmail(), persons.getZip());
             }
         }
         return personDto;

@@ -36,9 +36,8 @@ public class PersonsRepository {
 
     public void delete(Persons persons) {
         logger.info("delete with index !");
-        dataSource.getPersons().remove(persons);
+        List<Persons> personsList = findAll();
+        personsList.remove(persons);
         logger.info("delete successful!");
-
     }
-
 }
