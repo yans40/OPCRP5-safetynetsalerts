@@ -3,6 +3,7 @@ package com.openclassrooms.safetynetsalertsprojects.repository;
 import com.openclassrooms.safetynetsalertsprojects.model.DataSource;
 import com.openclassrooms.safetynetsalertsprojects.model.FireStations;
 import com.openclassrooms.safetynetsalertsprojects.model.MedicalRecords;
+import com.openclassrooms.safetynetsalertsprojects.model.Persons;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -26,5 +27,8 @@ public class MedicalRecordsRepository {
         List<MedicalRecords> medicalRecordsList=findAll();
         medicalRecordsList.add(medicalRecords);
     }
-
+    public void update(int index, MedicalRecords medicalRecords) {
+        List<MedicalRecords> list = findAll();
+        list.set(index, medicalRecords);
+    }
 }

@@ -26,7 +26,6 @@ public class PersonsService {
     MedicalRecordsService medicalRecordsService;
 
 
-
     public void addNewPerson(PersonDto personDto) {
         logger.info("adding new person !");
         Persons persons = dtoToPerson(personDto);
@@ -37,7 +36,6 @@ public class PersonsService {
         logger.info("transforming dto to persons !");
         return new Persons(personDto.getFirstName(), personDto.getLastName(), personDto.getAddress(), personDto.getCity(), personDto.getPhone(), personDto.getZip(), personDto.getEmail());
     }
-
 
 
     public void updatePerson(String firstName, String lastName, PersonDto personDto) {
@@ -51,10 +49,12 @@ public class PersonsService {
 
     public void deletePerson(String firstName, String lastName) {
         logger.info("deleting in progress ...!");
-        PersonDto personDto1= findPersonByFirstNameAndLastName(firstName, lastName);
-        int index = getIndexOfPersons(personDto1);
-        personsRepository.delete(index);
+        Persons personsToDelete = findPerson(firstName, lastName);
+        if (personsToDelete != null) {
+            personsRepository.delete(personsToDelete);
+        }
     }
+
     public int getIndexOfPersons(PersonDto personDto) {
         logger.info("index catching!");
         List<Persons> list = personsRepository.findAll();
@@ -135,11 +135,23 @@ public class PersonsService {
         List<Persons> personsList = personsRepository.findAll();
         PersonDto personDto = new PersonDto();
         for (Persons persons : personsList) {
-            if (persons.getFirstName().equals(firstName) && persons.getLastName().equals(lastName) ) {
+            if (persons.getFirstName().equals(firstName) && persons.getLastName().equals(lastName)) {
                 settingPersonDtoChanges(personDto, persons.getFirstName(), persons.getLastName(), persons.getAddress(), persons.getCity(), persons.getPhone(), persons.getEmail(), persons.getZip(), personDto);
             }
         }
         return personDto;
+    }
+
+    public Persons findPerson(String firstName, String lastName) {
+        logger.info("checking to find person with the same firstName and lastName ...!");
+        List<Persons> personsList = personsRepository.findAll();
+
+        for (Persons persons : personsList) {
+            if (persons.getFirstName().equals(firstName) && persons.getLastName().equals(lastName)) {
+                return persons;
+            }
+        }
+        return null;
     }
 
 

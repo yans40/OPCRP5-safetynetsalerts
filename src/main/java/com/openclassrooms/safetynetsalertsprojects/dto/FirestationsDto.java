@@ -10,6 +10,10 @@ public class FirestationsDto {
     private String address;
     private String station;
 
+    public FirestationsDto() {
+
+    }
+
     public String getAddress() {
         return address;
     }

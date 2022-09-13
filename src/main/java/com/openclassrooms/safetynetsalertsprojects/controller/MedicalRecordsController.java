@@ -27,7 +27,7 @@ public class MedicalRecordsController {
 
 
     @PutMapping("/medicalrecords/update/{firstName}&{lastName}")
-    public void updateMedicalRecord(@RequestBody MedicalRecordsDto medicalRecordsDto, @PathVariable String firstName, String lastName) {
+    public void updateMedicalRecord(@RequestBody MedicalRecordsDto medicalRecordsDto, @PathVariable String firstName, String lastName){
         medicalRecordsService.updateMedicalRecord(firstName,lastName, medicalRecordsDto);
     }
 

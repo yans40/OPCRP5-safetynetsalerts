@@ -2,6 +2,7 @@ package com.openclassrooms.safetynetsalertsprojects.service;
 
 import com.openclassrooms.safetynetsalertsprojects.dto.MedicalRecordsDto;
 import com.openclassrooms.safetynetsalertsprojects.model.MedicalRecords;
+import com.openclassrooms.safetynetsalertsprojects.model.Persons;
 import com.openclassrooms.safetynetsalertsprojects.repository.MedicalRecordsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,20 @@ public class MedicalRecordsService {
         MedicalRecordsDto medicalRecordsDto1 = findMedicalRecordsByFirstNameAndLastName(firstName, lastName);
         settingMedicalRecordsChanges(medicalRecordsDto1, medicalRecordsDto);
         MedicalRecords medicalRecords = dtoToMedicalRecords(medicalRecordsDto1);
-        medicalRecordsRepository.save(medicalRecords);
+        int index = getMedicalecordsIndex(medicalRecordsDto1);
+        medicalRecordsRepository.update(index,medicalRecords);
+    }
+
+    private int getMedicalecordsIndex(MedicalRecordsDto medicalRecordsDto1) {
+        List<MedicalRecords> list = medicalRecordsRepository.findAll();
+        int index = 0;
+        for (MedicalRecords medicalRecords : list) {
+            if (medicalRecords.getFirstName().equals(medicalRecordsDto1.getFirstName()) && medicalRecords.getLastName().equals(medicalRecordsDto1.getLastName())) {
+
+                index = list.lastIndexOf(medicalRecords);
+            }
+        }
+        return index;
     }
 
     public MedicalRecords dtoToMedicalRecords(MedicalRecordsDto medicalRecordsDto1) {
@@ -39,7 +53,7 @@ public class MedicalRecordsService {
         md1.setLastName(md2.getLastName());
         md1.setBirthdate(md2.getBirthdate());
         md1.setMedications(md2.getMedications());
-        md1.setAllergies(md2.getMedications());
+        md1.setAllergies(md2.getAllergies());
     }
 
 

@@ -34,11 +34,11 @@ public class PersonsRepository {
         list.set(index, persons);
     }
 
-    public void delete(int index) {
+    public void delete(Persons persons) {
         logger.info("delete with index !");
-        List<Persons> list = findAll();
-        list.remove(index);
+        dataSource.getPersons().remove(persons);
         logger.info("delete successful!");
 
     }
+
 }
