@@ -46,7 +46,6 @@ public class DataSource {
 
 @PostConstruct
     public void init() throws IOException {
-
         DataSource dataSource = mapper.readValue(new File(JSONPATH), DataSource.class);
         this.persons = dataSource.getPersons();
         this.firestations = dataSource.getFirestations();

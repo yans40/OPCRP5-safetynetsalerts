@@ -14,6 +14,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
@@ -53,7 +54,7 @@ public class MedicalRecordsServiceTest {
 
 
     @Test
-    void AgeCalculatorTest() throws ParseException {
+    void ageCalculatorTest() throws ParseException {
 
         MedicalRecordsDto medicalRecordsDto = new MedicalRecordsDto("bernard", "BOUCHER", "12/01/1980", List.of("hydrapermazol:900mg", "thradox:700mg"), List.of("peanut", "shellfish", "aznol"));
 
@@ -61,6 +62,31 @@ public class MedicalRecordsServiceTest {
         assertNotNull(age);
         assertEquals(age, 42);
 
+    }
+
+    @Test
+    void findMedicalRecordsTest() {
+
+        MedicalRecords medicalRecords1 = new MedicalRecords("Alain", "BOUCHER", "25/12/1956", List.of("hydrapermazol:900mg", "thradox:700mg"), List.of("peanut", "shellfish", "aznol"));
+        MedicalRecords medicalRecords2 = new MedicalRecords("Bernard", "VOISIN", "25/12/1956", List.of("aznol:200mg", "noxidian:100mg"), List.of("nillacilan"));
+
+        medicalRecordsService.findMedicalRecord("Alain","Boucher");
+
+
 
     }
+
+    @Test
+    void settingMedicalChangesTest() {
+
+        MedicalRecordsDto medicalRecords1 = new MedicalRecordsDto("Alain", "BOUCHER", "25/12/1956", List.of("hydrapermazol:900mg", "thradox:700mg"), List.of("peanut", "shellfish", "aznol"));
+        MedicalRecordsDto medicalRecords2 = new MedicalRecordsDto("Bernard", "VOISIN", "25/12/1956", List.of("aznol:200mg", "noxidian:100mg"), List.of("nillacilan"));
+
+        medicalRecordsService.settingMedicalRecordsChanges(medicalRecords1, medicalRecords2);
+
+        assertThat(medicalRecords1.getFirstName().equals(medicalRecords2.getFirstName()));
+
+    }
+
+
 }

@@ -13,12 +13,16 @@ public class FireStationsRepository {
     private  DataSource dataSource;
 
     public List<FireStations> findAll(){
-
         return dataSource.getFirestations();
     }
 
     public void save(FireStations fireStations) {
         List<FireStations> fireStationsList=findAll();
         fireStationsList.add(fireStations);
+    }
+
+    public void delete(FireStations fireStationsToDelete) {
+        List<FireStations> fireStationsList = findAll();
+        fireStationsList.remove(fireStationsToDelete);
     }
 }

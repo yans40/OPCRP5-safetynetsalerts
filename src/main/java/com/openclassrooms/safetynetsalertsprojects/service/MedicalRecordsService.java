@@ -29,7 +29,7 @@ public class MedicalRecordsService {
         settingMedicalRecordsChanges(medicalRecordsDto1, medicalRecordsDto);
         MedicalRecords medicalRecords = dtoToMedicalRecords(medicalRecordsDto1);
         int index = getMedicalecordsIndex(medicalRecordsDto1);
-        medicalRecordsRepository.update(index,medicalRecords);
+        medicalRecordsRepository.update(index, medicalRecords);
     }
 
     private int getMedicalecordsIndex(MedicalRecordsDto medicalRecordsDto1) {
@@ -37,7 +37,6 @@ public class MedicalRecordsService {
         int index = 0;
         for (MedicalRecords medicalRecords : list) {
             if (medicalRecords.getFirstName().equals(medicalRecordsDto1.getFirstName()) && medicalRecords.getLastName().equals(medicalRecordsDto1.getLastName())) {
-
                 index = list.lastIndexOf(medicalRecords);
             }
         }
@@ -48,7 +47,7 @@ public class MedicalRecordsService {
         return new MedicalRecords(medicalRecordsDto1.getFirstName(), medicalRecordsDto1.getLastName(), medicalRecordsDto1.getBirthdate(), medicalRecordsDto1.getMedications(), medicalRecordsDto1.getAllergies());
     }
 
-    private void settingMedicalRecordsChanges(MedicalRecordsDto md1, MedicalRecordsDto md2) {
+    public void settingMedicalRecordsChanges(MedicalRecordsDto md1, MedicalRecordsDto md2) {
         md1.setFirstName(md2.getFirstName());
         md1.setLastName(md2.getLastName());
         md1.setBirthdate(md2.getBirthdate());
@@ -72,6 +71,19 @@ public class MedicalRecordsService {
             }
         }
         return medicalRecordsDto;
+    }
+
+    public MedicalRecords findMedicalRecord(String firstName, String lastName) {
+        List<MedicalRecords> medicalRecordsList = medicalRecordsRepository.findAll();
+
+        for (MedicalRecords md : medicalRecordsList) {
+
+            if (md.getFirstName().equals(firstName) && md.getLastName().equals(lastName)) {
+
+                return md;
+            }
+        }
+        return null;
     }
 
 
@@ -114,4 +126,10 @@ public class MedicalRecordsService {
         return age;
     }
 
+    public void deleteMedicalRecord(String firstName, String lastName) {
+        MedicalRecords medicalRecordTodelete = findMedicalRecord(firstName, lastName);
+        if (medicalRecordTodelete != null) {
+            medicalRecordsRepository.delete(medicalRecordTodelete);
+        }
+    }
 }

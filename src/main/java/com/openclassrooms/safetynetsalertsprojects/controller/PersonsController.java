@@ -91,12 +91,12 @@ public class PersonsController {
     }
 
     @PutMapping("/persons/update/{firstName}&{lastName}")
-    public void updatePersonInfo(@RequestBody PersonDto personDto, @PathVariable String firstName,@PathVariable String lastName) throws ParseException {
-        personsService.updatePerson(firstName,lastName, personDto);
+    public void updatePersonInfo(@RequestBody PersonDto personDto, @PathVariable String firstName, @PathVariable String lastName) {
+        personsService.updatePerson(firstName, lastName, personDto);
     }
 
-   @DeleteMapping("/persons/delete/{firstName}&{lastName}")
-    public void deletePerson(@PathVariable String firstName,@PathVariable String lastName){
-     personsService.deletePerson(firstName,lastName);
+    @DeleteMapping("/persons/delete/{firstName}&{lastName}")
+    public void deletePerson(@PathVariable String firstName, @PathVariable String lastName) {
+        personsService.deletePerson(firstName, lastName);
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class FirestationsController {
@@ -14,7 +15,7 @@ public class FirestationsController {
     private FireStationsService fireStationsService;
 
 
-    @GetMapping("/firestations")
+    @GetMapping("/getfirestations")
     public List<FirestationsDto> showFireStationsList() {
 
         return fireStationsService.getFireStationsList();
@@ -27,15 +28,25 @@ public class FirestationsController {
 
     }
 
+    @GetMapping("/firestations")
+    public Map<String, String> getfirestationsmap() {
+        return fireStationsService.getFireStationsHashMap();
+    }
+
+
     @PostMapping("/firestation")
-    public void addNewFirestation(@RequestBody FirestationsDto firestationsDto){
+    public void addNewFirestationInTheMap(@RequestBody FirestationsDto firestationsDto) {
         fireStationsService.addNewFirestation(firestationsDto);
     }
 
     @PutMapping("/firestations/update/{address}")
-    public void updateFirestation(@RequestBody FirestationsDto firestationsDto,@PathVariable String address){
-        fireStationsService.updateFirestation(address,firestationsDto);
+    public void updateFirestation(@RequestBody FirestationsDto firestationsDto, @PathVariable String address) {
+        fireStationsService.updateFirestation(address, firestationsDto);
     }
 
+    @DeleteMapping("/firestations/delete/{address}")
+    public void deleteFirestation(@PathVariable String address) {
+        fireStationsService.delete(address);
+    }
 
 }

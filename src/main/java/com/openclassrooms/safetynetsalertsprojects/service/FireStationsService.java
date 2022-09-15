@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class FireStationsService {
@@ -26,13 +28,13 @@ public class FireStationsService {
 
     public void updateFirestation(String address, FirestationsDto firestationsDto) {
         FirestationsDto firestationsDto1 = findFirestationByAddress(address);
-        settingFirestationChanges(firestationsDto1,firestationsDto);
-        FireStations fireStations= dtoToFireStations(firestationsDto1);
+        settingFirestationChanges(firestationsDto1, firestationsDto);
+        FireStations fireStations = dtoToFireStations(firestationsDto1);
         fireStationsRepository.save(fireStations);
     }
 
     private void settingFirestationChanges(FirestationsDto firestationsDto1, FirestationsDto firestationsDto) {
-        firestationsDto1.setAddress(firestationsDto1.getAddress());
+        firestationsDto1.setAddress(firestationsDto.getAddress());
         firestationsDto1.setStation(firestationsDto.getStation());
     }
 
@@ -40,13 +42,24 @@ public class FireStationsService {
         List<FireStations> fireStationsList = fireStationsRepository.findAll();
         FirestationsDto firestationsDto = new FirestationsDto();
 
-        for (FireStations fireStation : fireStationsList){
-            if (fireStation.getAddress().equals(address)){
-                firestationsDto.setStation(fireStation.getStation());
-                firestationsDto.setAddress(firestationsDto.getAddress());
+        for (FireStations firestation : fireStationsList) {
+            if (firestation.getAddress().equals(address)) {
+                firestationsDto.setStation(firestation.getStation());
+                firestationsDto.setAddress(firestation.getAddress());
             }
         }
         return firestationsDto;
+    }
+
+    public FireStations findFirestation(String address) {
+        List<FireStations> fireStationsList = fireStationsRepository.findAll();
+
+        for (FireStations firestation : fireStationsList) {
+            if (firestation.getAddress().equals(address)) {
+                return firestation;
+            }
+        }
+        return null;
     }
 
     public List<FirestationsDto> getFireStationsList() {
@@ -59,7 +72,6 @@ public class FireStationsService {
             firestationsDto.setAddress(fireStations.getAddress());
             firestationsDto.setStation(fireStations.getStation());
             firestationsDtoList.add(firestationsDto);
-
         }
         return firestationsDtoList;
     }
@@ -72,14 +84,28 @@ public class FireStationsService {
         for (FirestationsDto fs : fireStations) {
 
             if (fs.getStation().contentEquals(station)) {
-
                 fireStationsFindByNumber.add(fs);
-
             }
-
         }
         return fireStationsFindByNumber;
-
     }
 
+    public Map<String, String> getFireStationsHashMap() {
+
+        List<FireStations> fireStationsList = fireStationsRepository.findAll();
+        Map<String, String> firestationsMap = new HashMap<>();
+
+        for (FireStations fireStations : fireStationsList) {
+            firestationsMap.put(fireStations.getAddress(), fireStations.getStation());
+        }
+        return firestationsMap;
+    }
+
+
+    public void delete(String address) {
+   FireStations fireStationsToDelete = findFirestation(address);
+
+   fireStationsRepository.delete(fireStationsToDelete);
+
+    }
 }
