@@ -2,7 +2,6 @@ package com.openclassrooms.safetynetsalertsprojects.service;
 
 import com.openclassrooms.safetynetsalertsprojects.dto.MedicalRecordsDto;
 import com.openclassrooms.safetynetsalertsprojects.model.MedicalRecords;
-import com.openclassrooms.safetynetsalertsprojects.model.Persons;
 import com.openclassrooms.safetynetsalertsprojects.repository.MedicalRecordsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,7 +31,7 @@ public class MedicalRecordsService {
         medicalRecordsRepository.update(index, medicalRecords);
     }
 
-    private int getMedicalecordsIndex(MedicalRecordsDto medicalRecordsDto1) {
+    public int getMedicalecordsIndex(MedicalRecordsDto medicalRecordsDto1) {
         List<MedicalRecords> list = medicalRecordsRepository.findAll();
         int index = 0;
         for (MedicalRecords medicalRecords : list) {
@@ -54,7 +53,6 @@ public class MedicalRecordsService {
         md1.setMedications(md2.getMedications());
         md1.setAllergies(md2.getAllergies());
     }
-
 
     public MedicalRecordsDto findMedicalRecordsByFirstNameAndLastName(String firstName, String lastName) {
         List<MedicalRecords> medicalRecordsList = medicalRecordsRepository.findAll();
@@ -79,13 +77,11 @@ public class MedicalRecordsService {
         for (MedicalRecords md : medicalRecordsList) {
 
             if (md.getFirstName().equals(firstName) && md.getLastName().equals(lastName)) {
-
                 return md;
             }
         }
         return null;
     }
-
 
     public List<MedicalRecordsDto> getMedicalRecordsList() {
 
@@ -103,7 +99,6 @@ public class MedicalRecordsService {
         }
         return medicalRecordsDtoList;
     }
-
 
     public Date birthdayStringToDate(String birthday) throws ParseException {
         Date date = new SimpleDateFormat("dd/MM/yyyy").parse(birthday);

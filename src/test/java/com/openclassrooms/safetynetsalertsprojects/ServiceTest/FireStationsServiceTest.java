@@ -28,7 +28,7 @@ public class FireStationsServiceTest {
 
 
     @Test
-    void getFireStationsListTest() {
+    public void getFireStationsListTest() {
 
         List<FireStations> mylistOfFirestations = new ArrayList<>();
 
@@ -37,7 +37,6 @@ public class FireStationsServiceTest {
 
         mylistOfFirestations.add(fireStations1);
         mylistOfFirestations.add(fireStations2);
-
 
         when(fireStationsRepository.findAll()).thenReturn(mylistOfFirestations);
         List<FirestationsDto> firestationsDtoList = fireStationsService.getFireStationsList();
@@ -45,12 +44,11 @@ public class FireStationsServiceTest {
         assertEquals(2, firestationsDtoList.size());
         assertNotNull(fireStations1.getStation());
         verify(fireStationsRepository, times(1)).findAll();
-
     }
 
 
     @Test
-    void getFirestationByStationNumber() {
+    public void getFirestationByStationNumber() {
         List<FireStations> mylistOfFirestations = new ArrayList<>();
 
         FireStations fireStations1 = new FireStations("50 rue de java ", "2");
@@ -59,18 +57,63 @@ public class FireStationsServiceTest {
         mylistOfFirestations.add(fireStations1);
         mylistOfFirestations.add(fireStations2);
 
-
         when(fireStationsRepository.findAll()).thenReturn(mylistOfFirestations);
         List<FirestationsDto> listToTest = fireStationsService.getFirestationByStationNumber("2");
 
         assertEquals(1, listToTest.size());
         assertEquals(listToTest.get(0).getAddress(), "50 rue de java ");
         verify(fireStationsRepository, times(1)).findAll();
-
-
     }
 
     @Test
-    void addNewFirestation() {
+    public void updateFirestationtest() {
+
+        FirestationsDto fireStationsDto = new FirestationsDto("50 rue de java", "2");
+
+        fireStationsService.updateFirestation("20 rue du lac", fireStationsDto);
+
+        verify(fireStationsRepository, times(1)).findAll();
+    }
+
+    @Test
+    public void findFirestationTest() {
+        List<FireStations> mylistOfFirestations = new ArrayList<>();
+
+        FireStations fireStations1 = new FireStations("50 rue de java", "2");
+        FireStations fireStations2 = new FireStations("20 rue du lac", "1");
+
+        mylistOfFirestations.add(fireStations1);
+        mylistOfFirestations.add(fireStations2);
+
+        when(fireStationsRepository.findAll()).thenReturn(mylistOfFirestations);
+        String address = "50 rue de java";
+        FirestationsDto firestationsDto = fireStationsService.findFirestationByAddress("50 rue de java");
+        assertEquals(address, firestationsDto.getAddress());
+    }
+
+    @Test
+    public void settingFirestationChangesTest() {
+        FirestationsDto fireStations1 = new FirestationsDto("50 rue de java", "2");
+        FirestationsDto fireStations2 = new FirestationsDto("20 rue du lac", "1");
+
+        fireStationsService.settingFirestationChanges(fireStations1, fireStations2);
+
+        assertEquals(fireStations1.getStation(), fireStations2.getStation());
+    }
+
+    @Test
+    public void getFireStationHashMapTest() {
+        List<FireStations> mylistOfFirestations = new ArrayList<>();
+
+        FireStations fireStations1 = new FireStations("50 rue de java", "2");
+        FireStations fireStations2 = new FireStations("20 rue du lac", "1");
+
+        mylistOfFirestations.add(fireStations1);
+        mylistOfFirestations.add(fireStations2);
+
+        when(fireStationsRepository.findAll()).thenReturn(mylistOfFirestations);
+        fireStationsService.getFireStationsHashMap();
+
+        verify(fireStationsRepository, times(1)).findAll();
     }
 }

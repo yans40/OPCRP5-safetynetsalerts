@@ -69,7 +69,7 @@ public class PersonsService {
 
     }
 
-    private void settingPersonDtoChanges(PersonDto personDto1, String firstName2, String lastName2, String address, String city, String phone, String email, String zip) {
+    public void settingPersonDtoChanges(PersonDto personDto1, String firstName2, String lastName2, String address, String city, String phone, String email, String zip) {
         logger.info("setting changes !");
         personDto1.setFirstName(firstName2);
         personDto1.setLastName(lastName2);
@@ -78,6 +78,26 @@ public class PersonsService {
         personDto1.setPhone(phone);
         personDto1.setEmail(email);
         personDto1.setZip(zip);
+    }
+
+//    public void settingChanges(PersonDto personDto1, PersonDto personDto2) {
+//        personDto1.setFirstName(personDto2.getFirstName());
+//        personDto1.setLastName(personDto2.getLastName());
+//        personDto1.setAddress(personDto2.getAddress());
+//        personDto1.setCity(personDto2.getCity());
+//        personDto1.setPhone(personDto2.getPhone());
+//        personDto1.setEmail(personDto2.getEmail());
+//        personDto1.setZip(personDto2.getZip());
+//    }
+
+    public void settingChangesDtoPerson(PersonDto personDto1, Persons person) {
+        personDto1.setFirstName(person.getFirstName());
+        personDto1.setLastName(person.getLastName());
+        personDto1.setAddress(person.getAddress());
+        personDto1.setCity(person.getCity());
+        personDto1.setPhone(person.getPhone());
+        personDto1.setEmail(person.getEmail());
+        personDto1.setZip(person.getZip());
     }
 
     public List<FirestationByStationNumberDto> getPersonList() {
@@ -136,7 +156,7 @@ public class PersonsService {
         PersonDto personDto = new PersonDto();
         for (Persons persons : personsList) {
             if (persons.getFirstName().equals(firstName) && persons.getLastName().equals(lastName)) {
-                settingPersonDtoChanges(personDto, persons.getFirstName(), persons.getLastName(), persons.getAddress(), persons.getCity(), persons.getPhone(), persons.getEmail(), persons.getZip());
+                settingChangesDtoPerson(personDto,persons);
             }
         }
         return personDto;
@@ -182,12 +202,6 @@ public class PersonsService {
             }
         }
         return communityEmailByCityDtoList;
-    }
-
-    public FirestationByStationNumberParentDto getPersonsByStationsNumber(String station) throws ParseException {
-
-        return getFirestationByStationNumberDto(station, fireStationsService, medicalRecordsService);
-
     }
 
     public FirestationByStationNumberParentDto getFirestationByStationNumberDto(String station, FireStationsService fireStationsService, MedicalRecordsService medicalRecordsService) throws ParseException {
@@ -260,12 +274,6 @@ public class PersonsService {
         childAlertListAndFamilyDto.setChildAlertByAdressDtoList(listOfChildByAddress);
         childAlertListAndFamilyDto.setParentListByAdressDtoList(listOfParentByAddress);
         return childAlertListAndFamilyDto;
-    }
-
-    public List<PhoneListDto> getPhoneNumberByFirestation(String firestation) {
-        List<FirestationsDto> fireStationsList = fireStationsService.getFirestationByStationNumber(firestation);
-        List<FirestationByStationNumberDto> listOfPersons = getPersonList();
-        return getPhoneListDtos(fireStationsList, listOfPersons);
     }
 
     public List<PhoneListDto> getPhoneListDtos(List<FirestationsDto> fireStationsList, List<FirestationByStationNumberDto> listOfPersons) {
@@ -344,7 +352,6 @@ public class PersonsService {
         }
         return floodByListOfStationDtoList;
     }
-
 
     public List<PersonInfoByNameDto> getPersonInfoByNameDtos(String firstName, String lastName) throws ParseException {
         List<PersonInfoByNameDto> personInfoByNameDtoList = getPersonByName(firstName, lastName);

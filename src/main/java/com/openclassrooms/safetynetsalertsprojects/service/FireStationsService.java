@@ -33,7 +33,7 @@ public class FireStationsService {
         fireStationsRepository.save(fireStations);
     }
 
-    private void settingFirestationChanges(FirestationsDto firestationsDto1, FirestationsDto firestationsDto) {
+    public void settingFirestationChanges(FirestationsDto firestationsDto1, FirestationsDto firestationsDto) {
         firestationsDto1.setAddress(firestationsDto.getAddress());
         firestationsDto1.setStation(firestationsDto.getStation());
     }
@@ -103,9 +103,7 @@ public class FireStationsService {
 
 
     public void delete(String address) {
-   FireStations fireStationsToDelete = findFirestation(address);
-
-   fireStationsRepository.delete(fireStationsToDelete);
-
+        FireStations fireStationsToDelete = findFirestation(address);
+        fireStationsRepository.delete(fireStationsToDelete);
     }
 }

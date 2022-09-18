@@ -10,7 +10,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -138,7 +137,6 @@ public class PersonServiceTest {
         mylistOfFirestationsBystationNumberDto.add(bernardK);
         mylistOfFirestationsBystationNumberDto.add(charlesH);
 
-
         when(personsRepository.findAll()).thenReturn(mylistOfFirestationsBystationNumberDto);
         List<CommunityEmailByCityDto> medicalRecordsDtoList = personsService.emailListByCity("Paris");
 
@@ -147,10 +145,41 @@ public class PersonServiceTest {
     }
 
     @Test
-    public void getFireByaddressListTest() throws ParseException {
+    public void findPersonTest() {
 
+        List<Persons> personsList = new ArrayList<>();
 
+        Persons charlesH = new Persons("Charles", "HENRY", "30 rue de Spring", "Creteil", "0303030303", "springC@tes", "77000");
+        Persons alainB = new Persons("Alain", "BOUCHON", "01 rue du Mock", "Nanterre", "0101010101", "alainb@test.fr", "92000");
+        Persons bernardK = new Persons("Bernard", "KARL", "50 rue de java ", "Paris", "0202020202", "BernardK@test.fr", "75000");
 
+        personsList.add(alainB);
+        personsList.add(bernardK);
+        personsList.add(charlesH);
 
+        when(personsRepository.findAll()).thenReturn(personsList);
+        Persons person = personsService.findPerson("Charles", "HENRY");
+        assertEquals(person, personsList.get(2));
+        assertEquals("Charles", person.getFirstName());
     }
+
+    @Test
+    public void deletePersonTest() {
+        List<Persons> personsList = new ArrayList<>();
+
+        Persons charlesH = new Persons("Charles", "HENRY", "30 rue de Spring", "Creteil", "0303030303", "springC@tes", "77000");
+        Persons alainB = new Persons("Alain", "BOUCHON", "01 rue du Mock", "Nanterre", "0101010101", "alainb@test.fr", "92000");
+        Persons bernardK = new Persons("Bernard", "KARL", "50 rue de java ", "Paris", "0202020202", "BernardK@test.fr", "75000");
+
+        personsList.add(alainB);
+        personsList.add(bernardK);
+        personsList.add(charlesH);
+
+        when(personsRepository.findAll()).thenReturn(personsList);
+        personsService.deletePerson("Alain", "BOUCHON");
+        verify(personsRepository, times(1)).findAll();
+        assertEquals("Bernard",personsList.get(1).getFirstName());
+    }
+
+
 }
