@@ -26,10 +26,8 @@ public class FireStationsServiceTest {
     @InjectMocks
     FireStationsService fireStationsService;
 
-
     @Test
     public void getFireStationsListTest() {
-
         List<FireStations> mylistOfFirestations = new ArrayList<>();
 
         FireStations fireStations1 = new FireStations("50 rue de java ", "2");
@@ -114,6 +112,23 @@ public class FireStationsServiceTest {
         when(fireStationsRepository.findAll()).thenReturn(mylistOfFirestations);
         fireStationsService.getFireStationsHashMap();
 
+        verify(fireStationsRepository, times(1)).findAll();
+    }
+
+    @Test
+    public void deleteFirestationsTest() {
+        List<FireStations> mylistOfFirestations = new ArrayList<>();
+
+        FireStations fireStations1 = new FireStations("50 rue de java", "2");
+        FireStations fireStations2 = new FireStations("20 rue du lac", "1");
+        FireStations fireStations3 = new FireStations("10 rue de nanterre", "3");
+
+        mylistOfFirestations.add(fireStations1);
+        mylistOfFirestations.add(fireStations2);
+        mylistOfFirestations.add(fireStations3);
+
+        when(fireStationsRepository.findAll()).thenReturn(mylistOfFirestations);
+        fireStationsService.delete("20 rue du lac");
         verify(fireStationsRepository, times(1)).findAll();
     }
 }

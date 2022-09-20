@@ -2,6 +2,7 @@ package com.openclassrooms.safetynetsalertsprojects.ControllerTest;
 
 import com.openclassrooms.safetynetsalertsprojects.controller.PersonsController;
 import com.openclassrooms.safetynetsalertsprojects.dto.*;
+import com.openclassrooms.safetynetsalertsprojects.service.PersonsService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -16,18 +17,22 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.Mockito.when;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+
 public class PersonsControllerTest {
     @Autowired
     private MockMvc mockMvc;
     @MockBean
     private PersonsController personsController;
+    private PersonsService personsService;
 
 
     @Test
@@ -48,11 +53,12 @@ public class PersonsControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].firstName", is("Alain")))
-                .andExpect(jsonPath("$[1].lastName", is("KARL")));
+                .andExpect(jsonPath("$[1].lastName", is("KARL")))
+                .andExpect(jsonPath("$[1].address", is("50 rue de java")));
     }
 
     @Test
-    void shouldReturnByStationNumberList() throws Exception {
+    void shouldReturnByStationNumberLisTest() throws Exception {
 
         List<FirestationByStationNumberDto> mylistOfFirestationsBystationNumberDto = new ArrayList<>();
 
@@ -108,8 +114,6 @@ public class PersonsControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$..[0].firstName", is(List.of("julie", "bernard"))));
-
-
     }
 
     @Test
@@ -152,11 +156,10 @@ public class PersonsControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isNotEmpty());
-
     }
 
     @Test
-    void shouldReturnListOfPersonsAndMedicalRecordsByAddress() throws Exception {
+    public void shouldReturnListOfPersonsAndMedicalRecordsByAddress() throws Exception {
 
         List<FloodByListOfStationDto> listOfTest = new ArrayList<>();
 
@@ -179,7 +182,7 @@ public class PersonsControllerTest {
     }
 
     @Test
-    void shouldReturnPersonsInfoByName() throws Exception {
+    public void shouldReturnPersonsInfoByName() throws Exception {
         List<PersonInfoByNameDto> listOfTest = new ArrayList<>();
 
         PersonInfoByNameDto pers1 = new PersonInfoByNameDto("bernard", "BOUCHER", "02 rue de Paris", 32, "berna@test.com", (List.of("ibupurin:200mg", "hydrapermazol:400mg")), (List.of("peanut", "shellfish", "aznol")));
@@ -198,7 +201,7 @@ public class PersonsControllerTest {
 
 
     @Test
-    void shouldReturnEmailOfPersonsinCity() throws Exception {
+    public void shouldReturnEmailOfPersonsinCity() throws Exception {
 
         List<CommunityEmailByCityDto> emailList = new ArrayList<>();
 
@@ -207,7 +210,6 @@ public class PersonsControllerTest {
         CommunityEmailByCityDto c = new CommunityEmailByCityDto("julie@Test.com");
         CommunityEmailByCityDto d = new CommunityEmailByCityDto("zoe@Test.com");
         CommunityEmailByCityDto e = new CommunityEmailByCityDto("jean@Test.com");
-
 
         emailList.add(a);
         emailList.add(b);
@@ -223,7 +225,6 @@ public class PersonsControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(5)));
     }
-
 }
 
 

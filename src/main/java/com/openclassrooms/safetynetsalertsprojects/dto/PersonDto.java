@@ -10,11 +10,10 @@ public class PersonDto {
     private String email;
     private String zip;
 
-    public PersonDto(String firstName, String lastName, String address, String city, String phone, String email, String zip) {
-    }
-
     public PersonDto() {
 
+    }
+    public PersonDto(String firstName, String lastName, String address, String city, String phone, String email, String zip) {
     }
 
     public String getFirstName() {

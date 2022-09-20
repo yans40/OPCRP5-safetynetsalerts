@@ -1,6 +1,7 @@
 package com.openclassrooms.safetynetsalertsprojects.RepositoryTest;
 
 
+import com.openclassrooms.safetynetsalertsprojects.dto.PersonDto;
 import com.openclassrooms.safetynetsalertsprojects.model.DataSource;
 import com.openclassrooms.safetynetsalertsprojects.model.FireStations;
 import com.openclassrooms.safetynetsalertsprojects.model.Persons;
@@ -44,7 +45,6 @@ public class FirestationsRepositoryTest {
         assertEquals(2, laFirestationsListe.size());
         assertEquals("1", fireStations2.getStation());
         verify(dataSource, times(1)).getFirestations();
-
     }
 
     @Test
@@ -63,8 +63,9 @@ public class FirestationsRepositoryTest {
 
         assertEquals(3, mylistOfFirestations.size());
     }
-@Test
-   public void deleteTest() {
+
+    @Test
+    public void deleteTest() {
         List<FireStations> mylistOfFirestations = new ArrayList<>();
 
         FireStations fireStations1 = new FireStations("50 rue de java ", "2");
@@ -75,14 +76,11 @@ public class FirestationsRepositoryTest {
         mylistOfFirestations.add(fireStations2);
         mylistOfFirestations.add(fireStations3);
 
-
         when(dataSource.getFirestations()).thenReturn(mylistOfFirestations);
-
 
         fireStationsRepository.delete(fireStations2);
 
         assertEquals(2, mylistOfFirestations.size());
-
     }
 }
 

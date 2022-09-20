@@ -13,7 +13,6 @@ import java.util.List;
 public class DataSource {
     @Autowired
    private ObjectMapper mapper;
-
     String JSONPATH ="src/main/resources/json/jsondata";
 
     private List<Persons> persons ;

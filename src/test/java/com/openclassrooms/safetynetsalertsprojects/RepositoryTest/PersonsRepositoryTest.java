@@ -1,5 +1,6 @@
 package com.openclassrooms.safetynetsalertsprojects.RepositoryTest;
 
+import com.openclassrooms.safetynetsalertsprojects.dto.PersonDto;
 import com.openclassrooms.safetynetsalertsprojects.model.DataSource;
 import com.openclassrooms.safetynetsalertsprojects.model.Persons;
 import com.openclassrooms.safetynetsalertsprojects.repository.PersonsRepository;
@@ -101,6 +102,5 @@ public class PersonsRepositoryTest {
         personsRepository.update(2,updatedPerson);
 
        verify(dataSource,times(1)).getPersons();
-
     }
 }

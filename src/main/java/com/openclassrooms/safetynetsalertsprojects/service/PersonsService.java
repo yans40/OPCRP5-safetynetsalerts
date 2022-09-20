@@ -80,16 +80,6 @@ public class PersonsService {
         personDto1.setZip(zip);
     }
 
-//    public void settingChanges(PersonDto personDto1, PersonDto personDto2) {
-//        personDto1.setFirstName(personDto2.getFirstName());
-//        personDto1.setLastName(personDto2.getLastName());
-//        personDto1.setAddress(personDto2.getAddress());
-//        personDto1.setCity(personDto2.getCity());
-//        personDto1.setPhone(personDto2.getPhone());
-//        personDto1.setEmail(personDto2.getEmail());
-//        personDto1.setZip(personDto2.getZip());
-//    }
-
     public void settingChangesDtoPerson(PersonDto personDto1, Persons person) {
         personDto1.setFirstName(person.getFirstName());
         personDto1.setLastName(person.getLastName());
@@ -174,7 +164,6 @@ public class PersonsService {
         return null;
     }
 
-
     public List<PhoneListDto> getPhoneListByAddress(String address) {
         List<FirestationByStationNumberDto> personsList = getPersonsByAddress(address);
         List<PhoneListDto> phoneListDtoList = new ArrayList<>();
@@ -187,7 +176,6 @@ public class PersonsService {
         }
         return phoneListDtoList;
     }
-
 
     public List<CommunityEmailByCityDto> emailListByCity(String city) {
 
