@@ -16,13 +16,4 @@ public class DataSourceController {
     @Autowired
     private MedicalRecordsService medicalRecordsService;
 
-
-
 }
-
-
-
-
-
-
-

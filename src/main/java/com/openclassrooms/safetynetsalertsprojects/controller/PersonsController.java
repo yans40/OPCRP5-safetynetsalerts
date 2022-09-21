@@ -26,15 +26,8 @@ public class PersonsController {
 
     @GetMapping("/persons")
     public List<FirestationByStationNumberDto> showPersonsList() {
-        logger.info("showPersonList");
+        logger.info("list of persons By stationNumber");
         return personsService.getPersonList();
-    }
-
-    @GetMapping("/address")
-    public List<FirestationByStationNumberDto> findPersonsByAddress(@RequestParam String address) {
-        logger.info("findPersonsByAddress!");
-        return personsService.getPersonsByAddress(address);
-
     }
 
     @GetMapping("/firestation")
@@ -45,7 +38,7 @@ public class PersonsController {
 
     @GetMapping("/childAlert")
     public ChildAlertListAndFamilyDto findChildAndFamily(@RequestParam String address) throws ParseException {
-        logger.info("find a list of children were address is and persons in the same family !");
+        logger.info("find a list of children By address and their family !");
         List<FirestationByStationNumberDto> personsByAddressList = personsService.getPersonsByAddress(address);
         return personsService.getChildAlertListAndFamilyDto(address, personsByAddressList, medicalRecordsService);
     }
@@ -73,30 +66,33 @@ public class PersonsController {
 
     @GetMapping("/flood/stations")
     public List<FloodByListOfStationDto> floodListByStation(@RequestParam List<String> stations) throws ParseException {
-
+        logger.info("all family deserve by a firestation!");
         return personsService.getFloodByListOfStationDtos(stations);
     }
 
 
     @GetMapping("/personInfo")
     public List<PersonInfoByNameDto> personsListByFirstNameAndLastName(@RequestParam String firstName, String lastName) throws ParseException {
-
+        logger.info("the list of medicals Informations by Names");
         return personsService.getPersonInfoByNameDtos(firstName, lastName);
     }
 
 
     @PostMapping("/person")
     public void addNewPerson(@RequestBody PersonDto personDto) {
+        logger.info("adding a new Person");
         personsService.addNewPerson(personDto);
     }
 
     @PutMapping("/persons/update/{firstName}&{lastName}")
     public void updatePersonInfo(@RequestBody PersonDto personDto, @PathVariable String firstName, @PathVariable String lastName) {
+        logger.info("updating an existing person's informations!");
         personsService.updatePerson(firstName, lastName, personDto);
     }
 
     @DeleteMapping("/persons/delete/{firstName}&{lastName}")
     public void deletePerson(@PathVariable String firstName, @PathVariable String lastName) {
+        logger.info("delete a person!");
         personsService.deletePerson(firstName, lastName);
     }
 }
