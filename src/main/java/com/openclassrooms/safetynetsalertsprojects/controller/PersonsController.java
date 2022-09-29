@@ -49,7 +49,6 @@ public class PersonsController {
         List<FirestationsDto> fireStationsList = fireStationsService.getFirestationByStationNumber(firestation);
         List<FirestationByStationNumberDto> listOfPersons = personsService.getPersonList();
         return personsService.getPhoneListDtos(fireStationsList, listOfPersons);
-
     }
 
     @GetMapping("/fire")
@@ -70,13 +69,11 @@ public class PersonsController {
         return personsService.getFloodByListOfStationDtos(stations);
     }
 
-
     @GetMapping("/personInfo")
     public List<PersonInfoByNameDto> personsListByFirstNameAndLastName(@RequestParam String firstName, String lastName) throws ParseException {
         logger.info("the list of medicals Informations by Names");
         return personsService.getPersonInfoByNameDtos(firstName, lastName);
     }
-
 
     @PostMapping("/person")
     public void addNewPerson(@RequestBody PersonDto personDto) {

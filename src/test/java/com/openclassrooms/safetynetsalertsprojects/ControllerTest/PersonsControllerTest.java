@@ -2,8 +2,9 @@ package com.openclassrooms.safetynetsalertsprojects.ControllerTest;
 
 import com.openclassrooms.safetynetsalertsprojects.controller.PersonsController;
 import com.openclassrooms.safetynetsalertsprojects.dto.*;
-import com.openclassrooms.safetynetsalertsprojects.service.PersonsService;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,9 +18,7 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -32,7 +31,7 @@ public class PersonsControllerTest {
     private MockMvc mockMvc;
     @MockBean
     private PersonsController personsController;
-    private PersonsService personsService;
+
 
 
     @Test
@@ -74,8 +73,6 @@ public class PersonsControllerTest {
         listToTest.setPersonsInfo(mylistOfFirestationsBystationNumberDto);
         listToTest.setNbAdult(1);
         listToTest.setNbChild(1);
-
-
         when(personsController.personInPotentialRisk("station")).thenReturn(listToTest);
 
 
