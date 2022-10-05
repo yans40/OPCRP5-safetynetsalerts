@@ -395,4 +395,32 @@ public class PersonServiceTest {
         List<PersonInfoByNameDto> list = personsService.getPersonInfoByNameDtos("Jean", "ROBERT");
         verify(medicalRecordsService, times(1)).getMedicalRecordsList();
     }
+
+    @Test
+    public void getChildAlertListAndFamily() throws ParseException {
+
+        List<MedicalRecordsDto> medicalRecordsDtoList = new ArrayList<>();
+
+        MedicalRecordsDto medicalRecordsDto = new MedicalRecordsDto("Charles", "HENRY", "12/01/2015", List.of("aznol:200mg", "noxidian:100mg"), List.of("nillacilan"));
+        MedicalRecordsDto medicalRecordsDto1 = new MedicalRecordsDto("lea", "BENOIT", "23/01/1981", List.of("aznol:200mg", "noxidian:100mg"), List.of("nillacilan"));
+
+        medicalRecordsDtoList.add(medicalRecordsDto);
+        medicalRecordsDtoList.add(medicalRecordsDto1);
+
+        List<FirestationByStationNumberDto> listOfPersonsByStationNumber = new ArrayList<>();
+
+        FirestationByStationNumberDto firestationByStationNumberDto1 = new FirestationByStationNumberDto("Charles", "HENRY", "834 Binoc Ave", "2");
+        FirestationByStationNumberDto firestationByStationNumberDto2 = new FirestationByStationNumberDto("Chantal", "HENRY", "30 rue de Spring", "2");
+        FirestationByStationNumberDto firestationByStationNumberDto3 = new FirestationByStationNumberDto("Gerard", "BONNET", "10 avenue de nanterre", "3");
+
+        listOfPersonsByStationNumber.add(firestationByStationNumberDto1);
+        listOfPersonsByStationNumber.add(firestationByStationNumberDto2);
+        listOfPersonsByStationNumber.add(firestationByStationNumberDto3);
+
+        when(medicalRecordsService.getMedicalRecordsList()).thenReturn(medicalRecordsDtoList);
+
+        personsService.getChildAlertListAndFamilyDto("834 Binoc Ave",listOfPersonsByStationNumber,medicalRecordsService);
+
+        verify(medicalRecordsService,times(1)).getMedicalRecordsList();
+    }
 }

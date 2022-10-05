@@ -31,11 +31,9 @@ public class MedicalRecordsRepositoryTest {
     public void findAllTest() {
         List<MedicalRecords> mylistOfMedicalRecords = new ArrayList<>();
 
-
         MedicalRecords medicalRecords1 = new MedicalRecords("Alain", "BOUCHER", "25/12/1956", List.of("hydrapermazol:900mg", "thradox:700mg"), List.of("peanut", "shellfish", "aznol"));
         MedicalRecords medicalRecords2 = new MedicalRecords("Bernard", "VOISIN", "25/12/1956", List.of("aznol:200mg", "noxidian:100mg"), List.of("nillacilan"));
         MedicalRecords medicalRecords3 = new MedicalRecords("Luc", "SANCHEZ", "25/12/1956", List.of("noxidian:100mg", "noznazol:250mg"), List.of(""));
-
 
         mylistOfMedicalRecords.add(medicalRecords1);
         mylistOfMedicalRecords.add(medicalRecords2);
@@ -72,7 +70,6 @@ public class MedicalRecordsRepositoryTest {
     public void updateTest(){
         List<MedicalRecords> mylistOfMedicalRecords = new ArrayList<>();
 
-
         MedicalRecords medicalRecords1 = new MedicalRecords("Alain", "BOUCHER", "25/12/1956", List.of("hydrapermazol:900mg", "thradox:700mg"), List.of("peanut", "shellfish", "aznol"));
         MedicalRecords medicalRecords2 = new MedicalRecords("Bernard", "VOISIN", "25/12/1956", List.of("aznol:200mg", "noxidian:100mg"), List.of("nillacilan"));
 
@@ -89,7 +86,6 @@ public class MedicalRecordsRepositoryTest {
     @Test
     public void deleteTest(){
         List<MedicalRecords> mylistOfMedicalRecords = new ArrayList<>();
-
 
         MedicalRecords medicalRecords1 = new MedicalRecords("Alain", "BOUCHER", "25/12/1956", List.of("hydrapermazol:900mg", "thradox:700mg"), List.of("peanut", "shellfish", "aznol"));
         MedicalRecords medicalRecords2 = new MedicalRecords("Bernard", "VOISIN", "25/12/1956", List.of("aznol:200mg", "noxidian:100mg"), List.of("nillacilan"));

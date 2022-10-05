@@ -27,7 +27,6 @@ public class MedicalRecordsController {
         medicalRecordsService.addNewMedicalRecord(medicalRecordsDto);
     }
 
-
     @PutMapping("/medicalrecords/update/{firstName}&{lastName}")
     public void updateMedicalRecord(@RequestBody MedicalRecordsDto medicalRecordsDto, @PathVariable String firstName, String lastName) {
         logger.info("up dating an existing Medical Records!");

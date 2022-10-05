@@ -26,7 +26,6 @@ public class PersonsRepositoryTest {
     @InjectMocks
     private PersonsRepository personsRepository;
 
-
     @Test
     public void findAllTest() {
         List<Persons> mylistOfPersons = new ArrayList<>();
