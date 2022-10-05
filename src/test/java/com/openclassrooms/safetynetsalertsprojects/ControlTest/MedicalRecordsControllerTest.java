@@ -1,6 +1,5 @@
-package com.openclassrooms.safetynetsalertsprojects.ControllerTest;
+package com.openclassrooms.safetynetsalertsprojects.ControlTest;
 
-import com.openclassrooms.safetynetsalertsprojects.controller.MedicalRecordsController;
 import com.openclassrooms.safetynetsalertsprojects.dto.MedicalRecordsDto;
 import com.openclassrooms.safetynetsalertsprojects.service.MedicalRecordsService;
 import org.junit.jupiter.api.Test;
@@ -17,9 +16,9 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -30,8 +29,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class MedicalRecordsControllerTest {
     @Autowired
     private MockMvc mockMvc;
-    @MockBean
-    private MedicalRecordsController medicalRecordsController;
 
     @MockBean
     private MedicalRecordsService medicalRecordsService;
@@ -49,13 +46,13 @@ public class MedicalRecordsControllerTest {
         medicalRecordsList.add(medicalRecords2);
         medicalRecordsList.add(medicalRecords3);
 
-        when(medicalRecordsController.getAllMedicalRecords()).thenReturn(medicalRecordsList);
+        when(medicalRecordsService.getMedicalRecordsList()).thenReturn(medicalRecordsList);
         this.mockMvc.perform(MockMvcRequestBuilders
                         .get("/medicalrecords")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size()").value(3));
+                .andExpect(status().isOk());
+
     }
 
     @Test
@@ -70,9 +67,9 @@ public class MedicalRecordsControllerTest {
         medicalRecordsList.add(medicalRecords2);
         medicalRecordsList.add(medicalRecords3);
 
-        when(medicalRecordsController.getAllMedicalRecords()).thenReturn(medicalRecordsList);
-        List<MedicalRecordsDto> listToTest =medicalRecordsController.getAllMedicalRecords();
-        assertEquals(3,listToTest.size());
+        when(medicalRecordsService.getMedicalRecordsList()).thenReturn(medicalRecordsList);
+
+        assertEquals(3,medicalRecordsList.size());
     }
 
     @Test
@@ -84,33 +81,40 @@ public class MedicalRecordsControllerTest {
     }
 
     @Test
-    public void shouldDeleteMedicalRecordsTest() {
-        List<MedicalRecordsDto> medicalRecordsList = new ArrayList<>();
-        //given
-        MedicalRecordsDto medicalRecords = new MedicalRecordsDto("jean", "Robert", "10/02/1951", List.of("noxidian:100mg", "noznazol:250mg"), List.of(""));
-        MedicalRecordsDto medicalRecords1 = new MedicalRecordsDto("Bruno", "BONNET", "14/03/1962", List.of("hydrapermazol:900mg", "thradox:700mg"), List.of("peanut", "shellfish", "aznol"));
-        medicalRecordsList.add(medicalRecords);
-        medicalRecordsList.add(medicalRecords1);
-        //when
-        when(medicalRecordsController.getAllMedicalRecords()).thenReturn(medicalRecordsList);
-        medicalRecordsController.deleteMedicalRecord("jean", "Robert");
-        //then
-        verify(medicalRecordsController, times(1)).deleteMedicalRecord("jean", "Robert");
+    public void shoulDeleteAMedicalRecords() throws Exception {
+        this.mockMvc.perform(MockMvcRequestBuilders
+                        .delete("/medicalrecords/delete/{firstName}&{lastName}","leo","messi")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 
     @Test
-    public void shouldAddMedicalRecordsTest() throws Exception {
-        List<MedicalRecordsDto> medicalRecordsList = new ArrayList<>();
-        //given
-        MedicalRecordsDto medicalRecords = new MedicalRecordsDto("jean", "Robert", "10/02/1951", List.of("noxidian:100mg", "noznazol:250mg"), List.of(""));
-        MedicalRecordsDto medicalRecords1 = new MedicalRecordsDto("Bruno", "BONNET", "14/03/1962", List.of("hydrapermazol:900mg", "thradox:700mg"), List.of("peanut", "shellfish", "aznol"));
-        medicalRecordsList.add(medicalRecords);
-
-        //when
-        when(medicalRecordsController.getAllMedicalRecords()).thenReturn(medicalRecordsList);
-        medicalRecordsController.addNewMedicalRecord(medicalRecords1);
-        //then
-        verify(medicalRecordsController, times(1)).addNewMedicalRecord(medicalRecords1);
+    public void shouldCreateAMedicalRecord() throws Exception {
+        this.mockMvc.perform(MockMvcRequestBuilders
+                        .post("/medicalrecord")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\n" +
+                                "    \"firstName\": \"leo\",\n" +
+                                "    \"lastName\": \"Messi\",\n" +
+                                "    \"birthdate\": \"09/06/1990\",\n" +
+                                "    \"medications\": [],\n" +
+                                "    \"allergies\": []\n" +
+                                "}"))
+                .andExpect(status().isOk());
     }
 
+    @Test
+    public void shouldUpdateAPerson() throws Exception {
+        this.mockMvc.perform(MockMvcRequestBuilders
+                        .put("/medicalrecords/update/{firstName}&{lastName}", "leo", "messi")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\n" +
+                                "    \"firstName\": \"leo\",\n" +
+                                "    \"lastName\": \"Messi\",\n" +
+                                "    \"birthdate\": \"09/06/1990\",\n" +
+                                "    \"medications\": [],\n" +
+                                "    \"allergies\": []\n" +
+                                "}"))
+                .andExpect(status().isOk());
+    }
 }

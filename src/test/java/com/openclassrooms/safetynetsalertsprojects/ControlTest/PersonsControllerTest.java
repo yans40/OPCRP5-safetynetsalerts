@@ -1,14 +1,15 @@
-package com.openclassrooms.safetynetsalertsprojects.ControllerTest;
+package com.openclassrooms.safetynetsalertsprojects.ControlTest;
 
-import com.openclassrooms.safetynetsalertsprojects.controller.PersonsController;
 import com.openclassrooms.safetynetsalertsprojects.dto.*;
+import com.openclassrooms.safetynetsalertsprojects.service.FireStationsService;
+import com.openclassrooms.safetynetsalertsprojects.service.MedicalRecordsService;
+import com.openclassrooms.safetynetsalertsprojects.service.PersonsService;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
@@ -29,9 +30,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class PersonsControllerTest {
     @Autowired
     private MockMvc mockMvc;
-    @MockBean
-    private PersonsController personsController;
 
+    @MockBean
+    private PersonsService personsService;
+
+    @MockBean
+
+    private FireStationsService fireStationsService;
+    @MockBean
+    private MedicalRecordsService medicalRecordsService;
 
 
     @Test
@@ -44,7 +51,7 @@ public class PersonsControllerTest {
         mylistOfFirestationsBystationNumberDto.add(alainB);
         mylistOfFirestationsBystationNumberDto.add(bernardK);
 
-        when(personsController.showPersonsList()).thenReturn(mylistOfFirestationsBystationNumberDto);
+        when(personsService.getPersonList()).thenReturn(mylistOfFirestationsBystationNumberDto);
 
         this.mockMvc.perform(MockMvcRequestBuilders
                         .get("/persons"))
@@ -73,10 +80,10 @@ public class PersonsControllerTest {
         listToTest.setPersonsInfo(mylistOfFirestationsBystationNumberDto);
         listToTest.setNbAdult(1);
         listToTest.setNbChild(1);
-        when(personsController.personInPotentialRisk("station")).thenReturn(listToTest);
+        when(personsService.getFirestationByStationNumberDto("station", fireStationsService, medicalRecordsService)).thenReturn(listToTest);
 
 
-        this.mockMvc.perform(MockMvcRequestBuilders
+        mockMvc.perform(MockMvcRequestBuilders
                         .get("/firestation?station=station"))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -94,6 +101,7 @@ public class PersonsControllerTest {
         ChildAlertByAddressDto zoeD = new ChildAlertByAddressDto("zoe", "DUPONT", 10);
         childList.add(julieB);
         childList.add(zoeD);
+
         List<ParentListByAdressDto> parentList = new ArrayList<>();
         ParentListByAdressDto bernardB = new ParentListByAdressDto("bernard", "BARBIE");
         ParentListByAdressDto edithD = new ParentListByAdressDto("edith", "DUPONT");
@@ -104,32 +112,56 @@ public class PersonsControllerTest {
         listToTest.setParentListByAdressDtoList(parentList);
         listToTest.setChildAlertByAdressDtoList(childList);
 
-        when(personsController.findChildAndFamily("address")).thenReturn(listToTest);
+        List<FirestationByStationNumberDto> mylistOfFirestationsBystationNumberDto = new ArrayList<>();
 
-        this.mockMvc.perform(MockMvcRequestBuilders
+        FirestationByStationNumberDto alainB = new FirestationByStationNumberDto("Alain", "BOUCHON", "01 rue du Mock", "0101010101");
+        FirestationByStationNumberDto aliceM = new FirestationByStationNumberDto("Alice", "MULLER", "62 rue du voyage", "0101010101");
+        FirestationByStationNumberDto bernardK = new FirestationByStationNumberDto("Bernard", "KARL", "50 rue de java", "0202020202");
+        mylistOfFirestationsBystationNumberDto.add(alainB);
+        mylistOfFirestationsBystationNumberDto.add(bernardK);
+        mylistOfFirestationsBystationNumberDto.add(aliceM);
+
+        when(personsService.getChildAlertListAndFamilyDto("address", mylistOfFirestationsBystationNumberDto, medicalRecordsService)).thenReturn(listToTest);
+
+        mockMvc.perform(MockMvcRequestBuilders
                         .get("/childAlert?address=address"))
                 .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$..[0].firstName", is(List.of("julie", "bernard"))));
+                .andExpect(status().isOk());
     }
 
     @Test
     void shouldReturnPhoneListByFireStationNumber() throws Exception {
 
-        List<PhoneListDto> listOfTest = new ArrayList<>();
+        List<FirestationsDto> firestationsDtoList = new ArrayList<>();
+        FirestationsDto firestationsDto1 = new FirestationsDto("50 rue de java", "2");
+        FirestationsDto firestationsDto2 = new FirestationsDto("01 rue du Mock", "3");
 
-        PhoneListDto tel1 = new PhoneListDto("0101010101");
-        PhoneListDto tel2 = new PhoneListDto("0202020202");
-        listOfTest.add(tel1);
-        listOfTest.add(tel2);
 
-        when(personsController.phoneAlertListByStation("firestation_number")).thenReturn(listOfTest);
-        this.mockMvc.perform(MockMvcRequestBuilders
+        firestationsDtoList.add(firestationsDto1);
+        firestationsDtoList.add(firestationsDto2);
+
+        List<FirestationByStationNumberDto> mylistOfFirestationsBystationNumberDto = new ArrayList<>();
+        FirestationByStationNumberDto alainB = new FirestationByStationNumberDto("Alain", "BOUCHON", "01 rue du Mock", "0101010101");
+        FirestationByStationNumberDto aliceM = new FirestationByStationNumberDto("Alice", "MULLER", "62 rue du voyage", "0101010101");
+        FirestationByStationNumberDto bernardK = new FirestationByStationNumberDto("Bernard", "KARL", "50 rue de java", "0202020202");
+
+        mylistOfFirestationsBystationNumberDto.add(alainB);
+        mylistOfFirestationsBystationNumberDto.add(bernardK);
+        mylistOfFirestationsBystationNumberDto.add(aliceM);
+
+       List <PhoneListDto> phoneListDto = new ArrayList<>();
+
+        PhoneListDto phoneListDto1=new PhoneListDto("0101010101");
+        PhoneListDto phoneListDto2=new PhoneListDto("0202020202");
+
+        phoneListDto.add(phoneListDto1);
+        phoneListDto.add(phoneListDto2);
+
+        when(personsService.getPhoneListDtos(firestationsDtoList,mylistOfFirestationsBystationNumberDto)).thenReturn(phoneListDto);
+        mockMvc.perform(MockMvcRequestBuilders
                         .get("/phoneAlert?firestation=firestation_number"))
                 .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$").isNotEmpty());
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -147,8 +179,8 @@ public class PersonsControllerTest {
         listOfTest.add(pers3);
         listOfTest.add(pers4);
 
-        when(personsController.fireByAddressList("address")).thenReturn(listOfTest);
-        this.mockMvc.perform(MockMvcRequestBuilders
+        when(personsService.getFireByAddressDtos("address")).thenReturn(listOfTest);
+        mockMvc.perform(MockMvcRequestBuilders
                         .get("/fire?address=address"))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -170,8 +202,8 @@ public class PersonsControllerTest {
         listOfTest.add(pers3);
         listOfTest.add(pers4);
 
-        when(personsController.floodListByStation(Collections.singletonList("stations"))).thenReturn(listOfTest);
-        this.mockMvc.perform(MockMvcRequestBuilders
+        when(personsService.getFloodByListOfStationDtos(Collections.singletonList("stations"))).thenReturn(listOfTest);
+        mockMvc.perform(MockMvcRequestBuilders
                         .get("/flood/stations?stations=stations"))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -188,8 +220,8 @@ public class PersonsControllerTest {
         listOfTest.add(pers1);
         listOfTest.add(pers2);
 
-        when(personsController.personsListByFirstNameAndLastName("firstName", "lastName")).thenReturn(listOfTest);
-        this.mockMvc.perform(MockMvcRequestBuilders
+        when(personsService.getPersonInfoByNameDtos("firstName", "lastName")).thenReturn(listOfTest);
+        mockMvc.perform(MockMvcRequestBuilders
                         .get("/personInfo?firstName=firstName&lastName=lastName"))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -214,13 +246,54 @@ public class PersonsControllerTest {
         emailList.add(d);
         emailList.add(e);
 
-        when(personsController.emailByCity("city")).thenReturn(emailList);
+        when(personsService.emailListByCity("city")).thenReturn(emailList);
 
-        this.mockMvc.perform(MockMvcRequestBuilders
+        mockMvc.perform(MockMvcRequestBuilders
                         .get("/communityEmail?city=city"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(5)));
+    }
+
+    @Test
+    public void shoulDeleteAPersons() throws Exception {
+        this.mockMvc.perform(MockMvcRequestBuilders
+                        .delete("/persons/delete/{firstName}&{lastName}", "leo", "messi")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+    @Test
+    public void shouldCreateAPerson() throws Exception {
+        this.mockMvc.perform(MockMvcRequestBuilders
+                .post("/person")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\n" +
+                        "    \"firstName\": \"leo\",\n" +
+                        "    \"lastName\": \"messi\",\n" +
+                        "    \"address\": \"10 avenue des princes\",\n" +
+                        "    \"city\": \"Paris\",\n" +
+                        "    \"zip\": \"91280\",\n" +
+                        "    \"phone\": \"841-874-2012\",\n" +
+                        "    \"email\": \"messi@email.com\"\n" +
+                        "}"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void shouldUpdateAPerson() throws Exception {
+        this.mockMvc.perform(MockMvcRequestBuilders
+                .put("/persons/update/{firstName}&{lastName}", "leo", "messi")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\n" +
+                        "    \"firstName\": \"leo\",\n" +
+                        "    \"lastName\": \"messi\",\n" +
+                        "    \"address\": \"10 avenue des princes\",\n" +
+                        "    \"city\": \"Paris\",\n" +
+                        "    \"zip\": \"91280\",\n" +
+                        "    \"phone\": \"841-874-2012\",\n" +
+                        "    \"email\": \"messi@email.com\"\n" +
+                        "}"))
+                .andExpect(status().isOk());
     }
 }
 

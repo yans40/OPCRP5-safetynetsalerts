@@ -361,7 +361,6 @@ public class PersonsService {
                     personInfoByNameDto.setAllergies(pers.getAllergies());
                     listByNameDtoList.add(personInfoByNameDto);
                 }
-
             }
         }
         return listByNameDtoList;
