@@ -2,6 +2,7 @@ package com.openclassrooms.safetynetsalertsprojects.ControlTest;
 
 import com.openclassrooms.safetynetsalertsprojects.dto.MedicalRecordsDto;
 import com.openclassrooms.safetynetsalertsprojects.service.MedicalRecordsService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -69,7 +70,7 @@ public class MedicalRecordsControllerTest {
 
         when(medicalRecordsService.getMedicalRecordsList()).thenReturn(medicalRecordsList);
 
-        assertEquals(3,medicalRecordsList.size());
+        Assertions.assertEquals(3, medicalRecordsList.size());
     }
 
     @Test
@@ -93,13 +94,7 @@ public class MedicalRecordsControllerTest {
         this.mockMvc.perform(MockMvcRequestBuilders
                         .post("/medicalrecord")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\n" +
-                                "    \"firstName\": \"leo\",\n" +
-                                "    \"lastName\": \"Messi\",\n" +
-                                "    \"birthdate\": \"09/06/1990\",\n" +
-                                "    \"medications\": [],\n" +
-                                "    \"allergies\": []\n" +
-                                "}"))
+                        .content("{\n    \"firstName\": \"leo\",\n    \"lastName\": \"Messi\",\n    \"birthdate\": \"09/06/1990\",\n    \"medications\": [],\n    \"allergies\": []\n}"))
                 .andExpect(status().isOk());
     }
 
@@ -108,13 +103,7 @@ public class MedicalRecordsControllerTest {
         this.mockMvc.perform(MockMvcRequestBuilders
                         .put("/medicalrecords/update/{firstName}&{lastName}", "leo", "messi")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\n" +
-                                "    \"firstName\": \"leo\",\n" +
-                                "    \"lastName\": \"Messi\",\n" +
-                                "    \"birthdate\": \"09/06/1990\",\n" +
-                                "    \"medications\": [],\n" +
-                                "    \"allergies\": []\n" +
-                                "}"))
+                        .content("{\n    \"firstName\": \"leo\",\n    \"lastName\": \"Messi\",\n    \"birthdate\": \"09/06/1990\",\n    \"medications\": [],\n    \"allergies\": []\n}"))
                 .andExpect(status().isOk());
     }
 }
