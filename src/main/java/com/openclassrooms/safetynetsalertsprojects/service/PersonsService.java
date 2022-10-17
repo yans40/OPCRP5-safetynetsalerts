@@ -66,7 +66,6 @@ public class PersonsService {
             }
         }
         return index;
-
     }
 
     public void settingPersonDtoChanges(PersonDto personDto1, String firstName2, String lastName2, String address, String city, String phone, String email, String zip) {
